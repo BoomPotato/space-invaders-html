@@ -1,0 +1,14 @@
+7 oct 2023
+
+1) Replace spaces and <br> with actual grids. Use a real grid.
+
+==================================================
+
+8 oct 2023
+
+1) Don't use image files for sprites. Instead, colour them dynamically using css
+   because using image files with grid cells is inflexible because the images and 
+   grids will have fixed widths and heights (grid uses a template).
+      - Edit (9 Oct 2023):
+        Not doing this cuz too difficult, may require advanced css knowledge.
+        Proceeding with initial image files.
