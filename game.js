@@ -59,57 +59,72 @@ function loadSprites() {
         });
 
         //Columns to the left of the middle column
+        let bunkerCounter = 0;
+        let leftDone = false;
         let previousFirstColumn = middleBunkerFirstColumn;
-        for (let i = 1; i <= bunkersOnEachSide; i++) {
+        while ((bunkerCounter < bunkersOnEachSide) && !leftDone) {
           let thirdColumn = previousFirstColumn - 1;
           let firstColumn = thirdColumn - 2;
 
           let gridColumnStart = firstColumn - 1;
           let gridColumnEnd = thirdColumn;
 
+          //If previous column set has a bunker
           if (bunkerImgToggle) {
             bunkerImgToggle = false;
-          } 
+          }
+          //If previous column doesn't have a bunker
           else {
+            bunkerRow.unshift({
+              "id": `gridbunker-${firstColumn}-${thirdColumn}`,
+              "gridColumnStartEnd": [gridColumnStart, gridColumnEnd],
+              "bunkerImgToggle": bunkerImgToggle
+            });
+            bunkerCounter++;
             bunkerImgToggle = true;
           }
 
-          bunkerRow.unshift({
-            "id": `gridbunker-${firstColumn}-${thirdColumn}`,
-            "gridColumnStartEnd": [gridColumnStart, gridColumnEnd],
-            "bunkerImgToggle": bunkerImgToggle
-          });
-
+          if (bunkerCounter >= bunkersOnEachSide) {
+            leftDone = true;
+          }
           previousFirstColumn = firstColumn;
         }
 
         //Restart counting from the middle bunker
         bunkerImgToggle = true;
+        bunkerCounter = 0;
 
         //Columns to the right of the middle column
+        let rightDone = false;
         let previousLastColumn = middleBunkerThirdColumn;
-        for (let i = 1; i <= bunkersOnEachSide; i++) {
+        while ((bunkerCounter < bunkersOnEachSide) && !rightDone) {
           let firstColumn = previousLastColumn + 1;
-          let thirdColumn = previousFirstColumn + 2;
+          let thirdColumn = firstColumn + 2;
 
           let gridColumnStart = firstColumn - 1;
           let gridColumnEnd = thirdColumn;
 
+          //If previous column set has a bunker
           if (bunkerImgToggle) {
             bunkerImgToggle = false;
-          } 
+          }
+          //If previous column doesn't have a bunker
           else {
+            bunkerRow.push({
+              "id": `gridbunker-${firstColumn}-${thirdColumn}`,
+              "gridColumnStartEnd": [gridColumnStart, gridColumnEnd],
+              "bunkerImgToggle": bunkerImgToggle
+            });
+            bunkerCounter++;
             bunkerImgToggle = true;
           }
 
-          bunkerRow.push({
-            "id": `gridbunker-${firstColumn}-${thirdColumn}`,
-            "gridColumnStartEnd": [gridColumnStart, gridColumnEnd],
-            "bunkerImgToggle": bunkerImgToggle
-          });
-
+          if (bunkerCounter >= bunkersOnEachSide) {
+            rightDone = true;
+          }
           previousLastColumn = thirdColumn;
         }
+
         //Delete later?
         console.log("test", bunkerRow);
 
