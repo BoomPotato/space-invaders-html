@@ -27,7 +27,7 @@ function getOctoImg() {
 function getBunkerImg() {
   let img = document.createElement("img");
   img.setAttribute("src", "./assets/bunker.png");
-  img.setAttribute("height", "25");
-  img.setAttribute("width", "50");
+  img.setAttribute("height", "40");
+  img.setAttribute("width", "120");
   return img;
 }

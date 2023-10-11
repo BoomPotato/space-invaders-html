@@ -16,6 +16,7 @@ var octoRowSize = 2
 //Recommended size: 4 or 5 (code can handle even and odd number of bunkers)
 //Range: 0 to 5
 var bunkerColumnSize = 5;
+var bunkerSegments = [];
 
 function startGame() {
   //Hide welcome buttons
@@ -42,7 +43,6 @@ function loadGrid() {
     //Bunkers
     //If row is the second last row (bunker row)
     if (row == rowSize - 1) {
-      let bunkerSegments = [];
 
       //Middle segment
       let middleBunkerFirstColumn = middleColumn - 1;
@@ -359,7 +359,10 @@ function loadInvaders() {
  * Bunker id format: bunker-{firstColumn}-{thirdColumn}
  */
 function loadBunkers() {
-
+  for (let i = 0; i < bunkerSegments.length; i++) {
+    let bunkerImg = getBunkerImg()
+    document.getElementById(bunkerSegments[i].id).appendChild(bunkerImg);
+  }
 }
 
 /**
