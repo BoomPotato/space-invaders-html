@@ -16,6 +16,7 @@ var octoRowSize = 2
 //Recommended size: 4 or 5 (code can handle even and odd number of bunkers)
 //Range: 0 to 5
 var bunkerColumnSize = 5;
+var bunkerSegments = [];
 
 function startGame() {
   //Hide welcome buttons
@@ -42,7 +43,6 @@ function loadGrid() {
     //Bunkers
     //If row is the second last row (bunker row)
     if (row == rowSize - 1) {
-      let bunkerRow = [];
 
       //Middle segment
       let middleBunkerFirstColumn = middleColumn - 1;
@@ -64,7 +64,7 @@ function loadGrid() {
         bunkersOnEachSide = (bunkerColumnSize - 1) / 2;
         //Middle segment has a bunker
         bunkerToggle = true;
-        bunkerRow.push({
+        bunkerSegments.push({
           "id": `gridbunker-${middleBunkerFirstColumn}-${middleBunkerThirdColumn}`,
           "gridColumnStartEnd": [middleBunkerGridColumnStart, middleBunkerGridColumnEnd],
         });
@@ -89,7 +89,7 @@ function loadGrid() {
         else {
           bunkerCounter++;
           bunkerToggle = true;
-          bunkerRow.unshift({
+          bunkerSegments.unshift({
             "id": `gridbunker-${firstColumn}-${thirdColumn}`,
             "gridColumnStartEnd": [gridColumnStart, gridColumnEnd]
           });
@@ -128,7 +128,7 @@ function loadGrid() {
         else {
           bunkerCounter++;
           bunkerToggle = true;
-          bunkerRow.push({
+          bunkerSegments.push({
             "id": `gridbunker-${firstColumn}-${thirdColumn}`,
             "gridColumnStartEnd": [gridColumnStart, gridColumnEnd]
           });
@@ -140,16 +140,16 @@ function loadGrid() {
         previousThirdColumn = thirdColumn;
       }
       //Log bunker segments
-      console.log("bunkerRow", bunkerRow);
+      console.log("bunkerSegments", bunkerSegments);
 
       //Create grid cells  
       const firstColumnOfAllSegments = [];
-      for (let i = 0; i < bunkerRow.length; i++) {
-        let idSplit = bunkerRow[i].id.split("-");
+      for (let i = 0; i < bunkerSegments.length; i++) {
+        let idSplit = bunkerSegments[i].id.split("-");
         firstColumnOfAllSegments.push(parseInt(idSplit[1]));
       }
       const firstColumnOfFirstSegment = firstColumnOfAllSegments[0];
-      const lastSegmentIdSplit = bunkerRow[bunkerRow.length - 1].id.split("-");
+      const lastSegmentIdSplit = bunkerSegments[bunkerSegments.length - 1].id.split("-");
       const thirdColumnOfLastSegment = parseInt(lastSegmentIdSplit[2]);
 
       //Create bunker segments
@@ -160,12 +160,12 @@ function loadGrid() {
             const segmentIndex = firstColumnOfAllSegments.indexOf(column);
             let gridItem = document.createElement("div");
             gridItem.setAttribute("class", "grid-item");
-            gridItem.setAttribute("id", bunkerRow[segmentIndex].id);
-            gridItem.style["grid-column-start"] = bunkerRow[segmentIndex].gridColumnStartEnd[0];
-            gridItem.style["grid-column-end"] = bunkerRow[segmentIndex].gridColumnStartEnd[1];
+            gridItem.setAttribute("id", bunkerSegments[segmentIndex].id);
+            gridItem.style["grid-column-start"] = bunkerSegments[segmentIndex].gridColumnStartEnd[0];
+            gridItem.style["grid-column-end"] = bunkerSegments[segmentIndex].gridColumnStartEnd[1];
 
             //Label the grid cell
-            let label = document.createTextNode(bunkerRow[segmentIndex].id);
+            let label = document.createTextNode(bunkerSegments[segmentIndex].id);
             gridItem.appendChild(label);
 
             grid.appendChild(gridItem);
@@ -173,7 +173,7 @@ function loadGrid() {
             //Create intermediate columns
             if (segmentIndex != firstColumnOfAllSegments.length - 1) {
               for (let i = 1; i <= 3; i++) {
-                const idOfSegmentSplit = bunkerRow[segmentIndex].id.split("-");
+                const idOfSegmentSplit = bunkerSegments[segmentIndex].id.split("-");
                 const columnOfSegment = parseInt(idOfSegmentSplit[2]);
 
                 let gridItem = document.createElement("div");
@@ -238,7 +238,6 @@ function loadGrid() {
  * Invader id format: {invaderType}-{row}-{column}
  */
 function loadInvaders() {
-  //Invaders
   let invaderRowSize = squidRowSize + crabRowSize + octoRowSize
   //If invader column size is odd
   if (invaderColumnSize % 2 != 0) {
@@ -360,7 +359,10 @@ function loadInvaders() {
  * Bunker id format: bunker-{firstColumn}-{thirdColumn}
  */
 function loadBunkers() {
-
+  for (let i = 0; i < bunkerSegments.length; i++) {
+    let bunkerImg = getBunkerImg()
+    document.getElementById(bunkerSegments[i].id).appendChild(bunkerImg);
+  }
 }
 
 /**
