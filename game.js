@@ -36,29 +36,30 @@ function loadSprites() {
 
   //Grid dimensions: 31 across, 13 down (5 invaders, 6 gaps, 1 bunker, 1 tank)
   for (let row = 1; row <= rowSize; row++) {
+    
     //If row is the second last row (bunker row)
     if (row == rowSize - 1) {
       //Bunkers
       let bunkerRow = [];
+
+      //Middle segment
+      let middleBunkerFirstColumn = middleColumn - 1;
+      let middleBunkerThirdColumn = middleColumn + 1;
+      let middleBunkerGridColumnStart = middleBunkerFirstColumn - 1;
+      let middleBunkerGridColumnEnd = middleBunkerThirdColumn;
+
       //If bunker column size is odd
       if (bunkerColumnSize % 2 != 0) {
         let bunkersOnEachSide = (bunkerColumnSize - 1) / 2;
 
-        //Middle column
-        let bunkerImgToggle = true;
-        let middleBunkerFirstColumn = middleColumn - 1;
-        let middleBunkerThirdColumn = middleColumn + 1;
-
-        let middleBunkerGridColumnStart = middleBunkerFirstColumn - 1;
-        let middleBunkerGridColumnEnd = middleBunkerThirdColumn;
-
+        //Middle segment has a bunker
+        let bunkerToggle = true;
         bunkerRow.push({
           "id": `gridbunker-${middleBunkerFirstColumn}-${middleBunkerThirdColumn}`,
           "gridColumnStartEnd": [middleBunkerGridColumnStart, middleBunkerGridColumnEnd],
-          "bunkerImgToggle": bunkerImgToggle
         });
 
-        //Columns to the left of the middle column
+        //Columns to the left of the middle segment
         let bunkerCounter = 0;
         let leftDone = false;
         let previousFirstColumn = middleBunkerFirstColumn;
@@ -69,19 +70,18 @@ function loadSprites() {
           let gridColumnStart = firstColumn - 1;
           let gridColumnEnd = thirdColumn;
 
-          //If previous column set has a bunker
-          if (bunkerImgToggle) {
-            bunkerImgToggle = false;
+          //If previous segment has a bunker
+          if (bunkerToggle) {
+            bunkerToggle = false;
           }
-          //If previous column doesn't have a bunker
+          //If previous segment doesn't have a bunker
           else {
+            bunkerCounter++;
+            bunkerToggle = true;
             bunkerRow.unshift({
               "id": `gridbunker-${firstColumn}-${thirdColumn}`,
-              "gridColumnStartEnd": [gridColumnStart, gridColumnEnd],
-              "bunkerImgToggle": bunkerImgToggle
+              "gridColumnStartEnd": [gridColumnStart, gridColumnEnd]
             });
-            bunkerCounter++;
-            bunkerImgToggle = true;
           }
 
           if (bunkerCounter >= bunkersOnEachSide) {
@@ -90,11 +90,11 @@ function loadSprites() {
           previousFirstColumn = firstColumn;
         }
 
-        //Restart counting from the middle bunker
-        bunkerImgToggle = true;
+        //Restart counting from the middle segment
+        bunkerToggle = true;
         bunkerCounter = 0;
 
-        //Columns to the right of the middle column
+        //Columns to the right of the middle segment
         let rightDone = false;
         let previousLastColumn = middleBunkerThirdColumn;
         while ((bunkerCounter < bunkersOnEachSide) && !rightDone) {
@@ -104,19 +104,18 @@ function loadSprites() {
           let gridColumnStart = firstColumn - 1;
           let gridColumnEnd = thirdColumn;
 
-          //If previous column set has a bunker
-          if (bunkerImgToggle) {
-            bunkerImgToggle = false;
+          //If previous segment has a bunker
+          if (bunkerToggle) {
+            bunkerToggle = false;
           }
-          //If previous column doesn't have a bunker
+          //If previous segment doesn't have a bunker
           else {
+            bunkerCounter++;
+            bunkerToggle = true;
             bunkerRow.push({
               "id": `gridbunker-${firstColumn}-${thirdColumn}`,
-              "gridColumnStartEnd": [gridColumnStart, gridColumnEnd],
-              "bunkerImgToggle": bunkerImgToggle
+              "gridColumnStartEnd": [gridColumnStart, gridColumnEnd]
             });
-            bunkerCounter++;
-            bunkerImgToggle = true;
           }
 
           if (bunkerCounter >= bunkersOnEachSide) {
@@ -124,14 +123,47 @@ function loadSprites() {
           }
           previousLastColumn = thirdColumn;
         }
-
         //Delete later?
-        console.log("test", bunkerRow);
-
+        console.log("bunkerRow", bunkerRow);
       }
       //If bunker column size is even
       else {
+        let bunkersOnEachSide = bunkerColumnSize / 2;
 
+        //Middle segment doesn't have a bunker
+        let bunkerToggle = false;
+
+        //Columns to the left of the middle segment
+        let bunkerCounter = 0;
+        let leftDone = false;
+        let previousFirstColumn = middleBunkerFirstColumn;
+        while ((bunkerCounter < bunkersOnEachSide) && !leftDone) {
+          let thirdColumn = previousFirstColumn - 1;
+          let firstColumn = thirdColumn - 2;
+
+          let gridColumnStart = firstColumn - 1;
+          let gridColumnEnd = thirdColumn;
+
+          //If previous segment has a bunker
+          if (bunkerToggle) {
+            bunkerToggle = false;
+          }
+          //If previous segment doesn't have a bunker
+          else {
+            bunkerCounter++;
+            bunkerToggle = true;
+            bunkerRow.unshift({
+              "id": `gridbunker-${firstColumn}-${thirdColumn}`,
+              "gridColumnStartEnd": [gridColumnStart, gridColumnEnd]
+            });
+          }
+
+          if (bunkerCounter >= bunkersOnEachSide) {
+            leftDone = true;
+          }
+          previousFirstColumn = firstColumn;
+        }
+        
       }
 
 
@@ -143,9 +175,9 @@ function loadSprites() {
         gridItem.setAttribute("class", "grid-item");
         gridItem.setAttribute("id", `grid-${row}-${column}`);
 
-        //Delete later?
-        let temp = document.createTextNode(`${row}-${column}`);
-        gridItem.appendChild(temp);
+        //Label the grid cell
+        let label = document.createTextNode(`${row}-${column}`);
+        gridItem.appendChild(label);
 
         grid.appendChild(gridItem);
         document.body.appendChild(grid);
@@ -157,9 +189,9 @@ function loadSprites() {
         gridItem.setAttribute("class", "grid-item");
         gridItem.setAttribute("id", `grid-${row}-${column}`);
 
-        //Delete later?
-        let temp = document.createTextNode(`${row}-${column}`);
-        gridItem.appendChild(temp);
+        //Label the grid cell
+        let label = document.createTextNode(`${row}-${column}`);
+        gridItem.appendChild(label);
 
         grid.appendChild(gridItem);
         document.body.appendChild(grid);
@@ -167,9 +199,8 @@ function loadSprites() {
     }
   }
 
-  let invaderRowSize = squidRowSize + crabRowSize + octoRowSize
-
   //Invaders
+  let invaderRowSize = squidRowSize + crabRowSize + octoRowSize
   //If invader column size is odd
   if (invaderColumnSize % 2 != 0) {
     let invadersOnEachSide = (invaderColumnSize - 1) / 2;
