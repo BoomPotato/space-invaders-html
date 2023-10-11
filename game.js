@@ -360,7 +360,7 @@ function loadInvaders() {
  */
 function loadBunkers() {
   for (let i = 0; i < bunkerSegments.length; i++) {
-    let bunkerImg = getBunkerImg()
+    let bunkerImg = getBunkerImg();
     document.getElementById(bunkerSegments[i].id).appendChild(bunkerImg);
   }
 }
@@ -369,5 +369,6 @@ function loadBunkers() {
  * Tank id format: tank-{row}-{column}
  */
 function loadTank() {
-
+  let tankImg = getTankImg();
+  document.getElementById(`grid-${rowSize}-${middleColumn}`).appendChild(tankImg);
 }

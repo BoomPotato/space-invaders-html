@@ -31,3 +31,11 @@ function getBunkerImg() {
   img.setAttribute("width", "120");
   return img;
 }
+
+function getTankImg() {
+  let img = document.createElement("img");
+  img.setAttribute("src", "./assets/tank.png");
+  img.setAttribute("height", "20");
+  img.setAttribute("width", "40");
+  return img;
+}
