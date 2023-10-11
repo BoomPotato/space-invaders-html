@@ -21,15 +21,17 @@ function startGame() {
   //Hide welcome buttons
   document.getElementById("welcomeBtns").style.display = "none";
 
-  loadSprites();
+  loadGrid();
+  loadInvaders();
+  loadBunkers();
+  loadTank();
 }
 
 /**
- * Sprite id format: {spriteType}-{row}-{column}
  * Grid id format: grid-{row}-{column}
  * Bunker grid id format: gridbunker-{firstColumn}-{thirdColumn}
  */
-function loadSprites() {
+function loadGrid() {
   let grid = document.createElement("div");
   grid.setAttribute("class", "grid-container");
   grid.setAttribute("id", "grid");
@@ -110,9 +112,9 @@ function loadSprites() {
 
       //Columns to the right of the middle segment
       let rightDone = false;
-      let previousLastColumn = middleBunkerThirdColumn;
+      let previousThirdColumn = middleBunkerThirdColumn;
       while ((bunkerCounter < bunkersOnEachSide) && !rightDone) {
-        let firstColumn = previousLastColumn + 1;
+        let firstColumn = previousThirdColumn + 1;
         let thirdColumn = firstColumn + 2;
 
         let gridColumnStart = firstColumn;
@@ -135,7 +137,7 @@ function loadSprites() {
         if (bunkerCounter >= bunkersOnEachSide) {
           rightDone = true;
         }
-        previousLastColumn = thirdColumn;
+        previousThirdColumn = thirdColumn;
       }
       //Log bunker segments
       console.log("bunkerRow", bunkerRow);
@@ -148,13 +150,11 @@ function loadSprites() {
       }
       const firstColumnOfFirstSegment = firstColumnOfAllSegments[0];
       const lastSegmentIdSplit = bunkerRow[bunkerRow.length - 1].id.split("-");
-      const lastColumnOfLastSegment = parseInt(lastSegmentIdSplit[2]);
+      const thirdColumnOfLastSegment = parseInt(lastSegmentIdSplit[2]);
 
-      // console.log("firstColumnOfFirstSegment", firstColumnOfFirstSegment)
-      // console.log("lastColumnOfLastSegment", lastColumnOfLastSegment)
-
+      //Create bunker segments
       for (let column = 1; column <= columnSize; column++) {
-        if (column >= firstColumnOfFirstSegment && column <= lastColumnOfLastSegment) {
+        if (column >= firstColumnOfFirstSegment && column <= thirdColumnOfLastSegment) {
           if (firstColumnOfAllSegments.includes(column)) {
             //Create bunker segment
             const segmentIndex = firstColumnOfAllSegments.indexOf(column);
@@ -232,7 +232,12 @@ function loadSprites() {
       }
     }
   }
+}
 
+/**
+ * Invader id format: {invaderType}-{row}-{column}
+ */
+function loadInvaders() {
   //Invaders
   let invaderRowSize = squidRowSize + crabRowSize + octoRowSize
   //If invader column size is odd
@@ -349,5 +354,18 @@ function loadSprites() {
       }
     }
   }
+}
+
+/**
+ * Bunker id format: bunker-{firstColumn}-{thirdColumn}
+ */
+function loadBunkers() {
+
+}
+
+/**
+ * Tank id format: tank-{row}-{column}
+ */
+function loadTank() {
 
 }
