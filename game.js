@@ -139,6 +139,49 @@ function loadSprites() {
       }
       //Log bunker segments
       console.log("bunkerRow", bunkerRow);
+
+      //Create grid cells  
+      const firstColumnOfAllSegments = [];
+      for (let i = 0; i < bunkerRow.length; i++) {
+        let idSplit = bunkerRow[i].id.split("-");
+        firstColumnOfAllSegments.push(parseInt(idSplit[1]));
+      }
+      const firstColumnOfFirstSegment = firstColumnOfAllSegments[0];
+      const lastSegmentIdSplit = bunkerRow[bunkerRow.length - 1].id.split("-");
+      const lastColumnOfLastSegment = parseInt(lastSegmentIdSplit[2]);
+
+      // console.log("firstColumnOfFirstSegment", firstColumnOfFirstSegment)
+      // console.log("lastColumnOfLastSegment", lastColumnOfLastSegment)
+
+      for (let column = 1; column <= columnSize; column++) {
+        if (column >= firstColumnOfFirstSegment && column <= lastColumnOfLastSegment) {
+          if (firstColumnOfAllSegments.includes(column)) {
+            let segmentIndex = firstColumnOfAllSegments.indexOf(column);
+            let gridItem = document.createElement("div");
+            gridItem.setAttribute("class", "grid-item");
+            gridItem.setAttribute("id", bunkerRow[segmentIndex].id);
+            gridItem.style["grid-column-start"] = bunkerRow[segmentIndex].gridColumnStartEnd[0];
+            gridItem.style["grid-column-end"] = bunkerRow[segmentIndex].gridColumnStartEnd[1];
+
+            //Label the grid cell
+            let label = document.createTextNode(bunkerRow[segmentIndex].id);
+            gridItem.appendChild(label);
+            
+            grid.appendChild(gridItem);
+          }
+        }
+        else {
+          let gridItem = document.createElement("div");
+          gridItem.setAttribute("class", "grid-item");
+          gridItem.setAttribute("id", `grid-${row}-${column}`);
+
+          //Label the grid cell
+          let label = document.createTextNode(`${row}-${column}`);
+          gridItem.appendChild(label);
+          
+          grid.appendChild(gridItem);
+        }
+      }
     }
     //If row is the last row (tank row)
     else if (row == rowSize) {
