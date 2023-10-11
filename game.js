@@ -21,22 +21,24 @@ function startGame() {
   //Hide welcome buttons
   document.getElementById("welcomeBtns").style.display = "none";
 
-  loadSprites();
+  loadGrid();
+  loadInvaders();
+  loadBunkers();
+  loadTank();
 }
 
 /**
- * Sprite id format: {spriteType}-{row}-{column}
  * Grid id format: grid-{row}-{column}
  * Bunker grid id format: gridbunker-{firstColumn}-{thirdColumn}
  */
-function loadSprites() {
+function loadGrid() {
   let grid = document.createElement("div");
   grid.setAttribute("class", "grid-container");
   grid.setAttribute("id", "grid");
 
   //Grid dimensions: 31 across, 13 down (5 invaders, 6 gaps, 1 bunker, 1 tank)
   for (let row = 1; row <= rowSize; row++) {
-    
+
     //Bunkers
     //If row is the second last row (bunker row)
     if (row == rowSize - 1) {
@@ -45,8 +47,8 @@ function loadSprites() {
       //Middle segment
       let middleBunkerFirstColumn = middleColumn - 1;
       let middleBunkerThirdColumn = middleColumn + 1;
-      let middleBunkerGridColumnStart = middleBunkerFirstColumn - 1;
-      let middleBunkerGridColumnEnd = middleBunkerThirdColumn;
+      let middleBunkerGridColumnStart = middleBunkerFirstColumn;
+      let middleBunkerGridColumnEnd = middleBunkerThirdColumn + 1;
 
       let bunkersOnEachSide = 0;
       let bunkerToggle = false;
@@ -76,8 +78,8 @@ function loadSprites() {
         let thirdColumn = previousFirstColumn - 1;
         let firstColumn = thirdColumn - 2;
 
-        let gridColumnStart = firstColumn - 1;
-        let gridColumnEnd = thirdColumn;
+        let gridColumnStart = firstColumn;
+        let gridColumnEnd = thirdColumn + 1;
 
         //If previous segment has a bunker
         if (bunkerToggle) {
@@ -110,13 +112,13 @@ function loadSprites() {
 
       //Columns to the right of the middle segment
       let rightDone = false;
-      let previousLastColumn = middleBunkerThirdColumn;
+      let previousThirdColumn = middleBunkerThirdColumn;
       while ((bunkerCounter < bunkersOnEachSide) && !rightDone) {
-        let firstColumn = previousLastColumn + 1;
+        let firstColumn = previousThirdColumn + 1;
         let thirdColumn = firstColumn + 2;
 
-        let gridColumnStart = firstColumn - 1;
-        let gridColumnEnd = thirdColumn;
+        let gridColumnStart = firstColumn;
+        let gridColumnEnd = thirdColumn + 1;
 
         //If previous segment has a bunker
         if (bunkerToggle) {
@@ -135,10 +137,70 @@ function loadSprites() {
         if (bunkerCounter >= bunkersOnEachSide) {
           rightDone = true;
         }
-        previousLastColumn = thirdColumn;
+        previousThirdColumn = thirdColumn;
       }
       //Log bunker segments
       console.log("bunkerRow", bunkerRow);
+
+      //Create grid cells  
+      const firstColumnOfAllSegments = [];
+      for (let i = 0; i < bunkerRow.length; i++) {
+        let idSplit = bunkerRow[i].id.split("-");
+        firstColumnOfAllSegments.push(parseInt(idSplit[1]));
+      }
+      const firstColumnOfFirstSegment = firstColumnOfAllSegments[0];
+      const lastSegmentIdSplit = bunkerRow[bunkerRow.length - 1].id.split("-");
+      const thirdColumnOfLastSegment = parseInt(lastSegmentIdSplit[2]);
+
+      //Create bunker segments
+      for (let column = 1; column <= columnSize; column++) {
+        if (column >= firstColumnOfFirstSegment && column <= thirdColumnOfLastSegment) {
+          if (firstColumnOfAllSegments.includes(column)) {
+            //Create bunker segment
+            const segmentIndex = firstColumnOfAllSegments.indexOf(column);
+            let gridItem = document.createElement("div");
+            gridItem.setAttribute("class", "grid-item");
+            gridItem.setAttribute("id", bunkerRow[segmentIndex].id);
+            gridItem.style["grid-column-start"] = bunkerRow[segmentIndex].gridColumnStartEnd[0];
+            gridItem.style["grid-column-end"] = bunkerRow[segmentIndex].gridColumnStartEnd[1];
+
+            //Label the grid cell
+            let label = document.createTextNode(bunkerRow[segmentIndex].id);
+            gridItem.appendChild(label);
+
+            grid.appendChild(gridItem);
+
+            //Create intermediate columns
+            if (segmentIndex != firstColumnOfAllSegments.length - 1) {
+              for (let i = 1; i <= 3; i++) {
+                const idOfSegmentSplit = bunkerRow[segmentIndex].id.split("-");
+                const columnOfSegment = parseInt(idOfSegmentSplit[2]);
+
+                let gridItem = document.createElement("div");
+                gridItem.setAttribute("class", "grid-item");
+                gridItem.setAttribute("id", `grid-${row}-${columnOfSegment + i}`);
+
+                //Label the grid cell
+                let label = document.createTextNode(`${row}-${columnOfSegment + i}`);
+                gridItem.appendChild(label);
+
+                grid.appendChild(gridItem);
+              }
+            }
+          }
+        }
+        else {
+          let gridItem = document.createElement("div");
+          gridItem.setAttribute("class", "grid-item");
+          gridItem.setAttribute("id", `grid-${row}-${column}`);
+
+          //Label the grid cell
+          let label = document.createTextNode(`${row}-${column}`);
+          gridItem.appendChild(label);
+
+          grid.appendChild(gridItem);
+        }
+      }
     }
     //If row is the last row (tank row)
     else if (row == rowSize) {
@@ -170,7 +232,12 @@ function loadSprites() {
       }
     }
   }
+}
 
+/**
+ * Invader id format: {invaderType}-{row}-{column}
+ */
+function loadInvaders() {
   //Invaders
   let invaderRowSize = squidRowSize + crabRowSize + octoRowSize
   //If invader column size is odd
@@ -287,5 +354,18 @@ function loadSprites() {
       }
     }
   }
+}
+
+/**
+ * Bunker id format: bunker-{firstColumn}-{thirdColumn}
+ */
+function loadBunkers() {
+
+}
+
+/**
+ * Tank id format: tank-{row}-{column}
+ */
+function loadTank() {
 
 }
