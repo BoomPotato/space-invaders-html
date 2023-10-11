@@ -45,8 +45,8 @@ function loadSprites() {
       //Middle segment
       let middleBunkerFirstColumn = middleColumn - 1;
       let middleBunkerThirdColumn = middleColumn + 1;
-      let middleBunkerGridColumnStart = middleBunkerFirstColumn - 1;
-      let middleBunkerGridColumnEnd = middleBunkerThirdColumn;
+      let middleBunkerGridColumnStart = middleBunkerFirstColumn;
+      let middleBunkerGridColumnEnd = middleBunkerThirdColumn + 1;
 
       let bunkersOnEachSide = 0;
       let bunkerToggle = false;
@@ -76,8 +76,8 @@ function loadSprites() {
         let thirdColumn = previousFirstColumn - 1;
         let firstColumn = thirdColumn - 2;
 
-        let gridColumnStart = firstColumn - 1;
-        let gridColumnEnd = thirdColumn;
+        let gridColumnStart = firstColumn;
+        let gridColumnEnd = thirdColumn + 1;
 
         //If previous segment has a bunker
         if (bunkerToggle) {
@@ -115,8 +115,8 @@ function loadSprites() {
         let firstColumn = previousLastColumn + 1;
         let thirdColumn = firstColumn + 2;
 
-        let gridColumnStart = firstColumn - 1;
-        let gridColumnEnd = thirdColumn;
+        let gridColumnStart = firstColumn;
+        let gridColumnEnd = thirdColumn + 1;
 
         //If previous segment has a bunker
         if (bunkerToggle) {
