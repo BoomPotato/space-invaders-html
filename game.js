@@ -36,7 +36,7 @@ function loadSprites() {
 
   //Grid dimensions: 31 across, 13 down (5 invaders, 6 gaps, 1 bunker, 1 tank)
   for (let row = 1; row <= rowSize; row++) {
-    
+
     //Bunkers
     //If row is the second last row (bunker row)
     if (row == rowSize - 1) {
@@ -156,7 +156,8 @@ function loadSprites() {
       for (let column = 1; column <= columnSize; column++) {
         if (column >= firstColumnOfFirstSegment && column <= lastColumnOfLastSegment) {
           if (firstColumnOfAllSegments.includes(column)) {
-            let segmentIndex = firstColumnOfAllSegments.indexOf(column);
+            //Create bunker segment
+            const segmentIndex = firstColumnOfAllSegments.indexOf(column);
             let gridItem = document.createElement("div");
             gridItem.setAttribute("class", "grid-item");
             gridItem.setAttribute("id", bunkerRow[segmentIndex].id);
@@ -166,8 +167,26 @@ function loadSprites() {
             //Label the grid cell
             let label = document.createTextNode(bunkerRow[segmentIndex].id);
             gridItem.appendChild(label);
-            
+
             grid.appendChild(gridItem);
+
+            //Create intermediate columns
+            if (segmentIndex != firstColumnOfAllSegments.length - 1) {
+              for (let i = 1; i <= 3; i++) {
+                const idOfSegmentSplit = bunkerRow[segmentIndex].id.split("-");
+                const columnOfSegment = parseInt(idOfSegmentSplit[2]);
+
+                let gridItem = document.createElement("div");
+                gridItem.setAttribute("class", "grid-item");
+                gridItem.setAttribute("id", `grid-${row}-${columnOfSegment + i}`);
+
+                //Label the grid cell
+                let label = document.createTextNode(`${row}-${columnOfSegment + i}`);
+                gridItem.appendChild(label);
+
+                grid.appendChild(gridItem);
+              }
+            }
           }
         }
         else {
@@ -178,7 +197,7 @@ function loadSprites() {
           //Label the grid cell
           let label = document.createTextNode(`${row}-${column}`);
           gridItem.appendChild(label);
-          
+
           grid.appendChild(gridItem);
         }
       }
