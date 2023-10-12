@@ -11,13 +11,17 @@ h1 {
 .grid-container {
     display: grid;
     grid-template-columns: repeat(31, 3vw);
+    grid-template-rows: repeat(13, 5.5vh);
     margin-top: 20px;
     justify-content: center;
 }
   
 .grid-item {
     border: 1px solid darkred;
+    display: flex;
     text-align: center;
+    align-items: center;
+    justify-content: center;
 }
 
 #welcomeBtns {
@@ -27,9 +31,4 @@ h1 {
 .test {
     grid-column-start: 14;
     grid-column-end: 17;
-}
-
-.test2 {
-    grid-column-start: 11;
-    grid-column-end: 14;
 }

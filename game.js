@@ -1,7 +1,7 @@
 "use strict";
 
 //Recommended grid dimensions: 31 columns, 13 rows (5 invaders, 6 gaps, 1 bunker, 1 tank)
-var rowSize = 13;
+var rowSize = 13; //Change grid-template-rows in the "style.css" file too!
 var columnSize = 31; //Must be odd number. Change grid-template-columns in the "style.css" file too!
 var middleColumn = Math.ceil(columnSize / 2);
 
@@ -165,8 +165,8 @@ function loadGrid() {
             gridItem.style["grid-column-end"] = bunkerSegments[segmentIndex].gridColumnStartEnd[1];
 
             //Label the grid cell
-            let label = document.createTextNode(bunkerSegments[segmentIndex].id);
-            gridItem.appendChild(label);
+            // let label = document.createTextNode(bunkerSegments[segmentIndex].id);
+            // gridItem.appendChild(label);
 
             grid.appendChild(gridItem);
 
@@ -181,8 +181,8 @@ function loadGrid() {
                 gridItem.setAttribute("id", `grid-${row}-${columnOfSegment + i}`);
 
                 //Label the grid cell
-                let label = document.createTextNode(`${row}-${columnOfSegment + i}`);
-                gridItem.appendChild(label);
+                // let label = document.createTextNode(`${row}-${columnOfSegment + i}`);
+                // gridItem.appendChild(label);
 
                 grid.appendChild(gridItem);
               }
@@ -195,8 +195,8 @@ function loadGrid() {
           gridItem.setAttribute("id", `grid-${row}-${column}`);
 
           //Label the grid cell
-          let label = document.createTextNode(`${row}-${column}`);
-          gridItem.appendChild(label);
+          // let label = document.createTextNode(`${row}-${column}`);
+          // gridItem.appendChild(label);
 
           grid.appendChild(gridItem);
         }
@@ -210,8 +210,8 @@ function loadGrid() {
         gridItem.setAttribute("id", `grid-${row}-${column}`);
 
         //Label the grid cell
-        let label = document.createTextNode(`${row}-${column}`);
-        gridItem.appendChild(label);
+        // let label = document.createTextNode(`${row}-${column}`);
+        // gridItem.appendChild(label);
 
         grid.appendChild(gridItem);
         document.body.appendChild(grid);
@@ -224,8 +224,8 @@ function loadGrid() {
         gridItem.setAttribute("id", `grid-${row}-${column}`);
 
         //Label the grid cell
-        let label = document.createTextNode(`${row}-${column}`);
-        gridItem.appendChild(label);
+        // let label = document.createTextNode(`${row}-${column}`);
+        // gridItem.appendChild(label);
 
         grid.appendChild(gridItem);
         document.body.appendChild(grid);
