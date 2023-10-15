@@ -18,7 +18,10 @@ var octoRowSize = 2
 var bunkerColumnSize = 5;
 var bunkerSegments = [];
 
-function startGame() {
+//Seconds to countdown before the game starts
+var countdownDuration = 5;
+
+function initialiseGame() {
   //Hide welcome buttons
   document.getElementById("welcomeBtns").style.display = "none";
 
@@ -26,6 +29,9 @@ function startGame() {
   loadInvaders();
   loadBunkers();
   loadTank();
+
+  countdown();
+  startGame();
 }
 
 /**
@@ -33,9 +39,7 @@ function startGame() {
  * Bunker grid id format: gridbunker-{firstColumn}-{thirdColumn}
  */
 function loadGrid() {
-  let grid = document.createElement("div");
-  grid.setAttribute("class", "grid-container");
-  grid.setAttribute("id", "grid");
+  let grid = document.getElementById("grid");
 
   //Grid dimensions: 31 across, 13 down (5 invaders, 6 gaps, 1 bunker, 1 tank)
   for (let row = 1; row <= rowSize; row++) {
@@ -371,4 +375,29 @@ function loadBunkers() {
 function loadTank() {
   let tankImg = getTankImg();
   document.getElementById(`grid-${rowSize}-${middleColumn}`).appendChild(tankImg);
+}
+
+function countdown() {
+  //Unhide overlay
+  let overlay = document.getElementById("overlay");
+  overlay.style.display = "flex";
+
+  let countdownElement = document.getElementById("countdown");
+  countdownElement.textContent = countdownDuration;
+  let counter = countdownDuration;
+  let timer = setInterval(() => {
+    counter--;
+    countdownElement.textContent = counter;
+    if (counter == 0 ) {
+      countdownElement.textContent = "START";
+    }
+    if (counter <= -1 ) {
+      clearInterval(timer);
+      overlay.style.display = "none";
+    }
+  }, 1000);
+}
+
+function startGame() {
+
 }
