@@ -10,7 +10,8 @@ var invaderColumnSize = 11;
 //Invader row sizes must add up to >= 5
 var squidRowSize = 1;
 var crabRowSize = 2;
-var octoRowSize = 2
+var octoRowSize = 2;
+var invaders = [];
 
 //Each bunker takes up 3 columns
 //Recommended size: 4 or 5 (code can handle even and odd number of bunkers)
@@ -246,62 +247,62 @@ function loadInvaders() {
   //If invader column size is odd
   if (invaderColumnSize % 2 != 0) {
     let invadersOnEachSide = (invaderColumnSize - 1) / 2;
-    for (let invaderRow = 1; invaderRow <= invaderRowSize; invaderRow++) {
+    for (let row = 1; row <= invaderRowSize; row++) {
       //Squid rows
-      if (invaderRow <= squidRowSize) {
+      if (row <= squidRowSize) {
         //Divider column (middle column)
         let squidImg = getSquidImg();
-        setSquidId(squidImg, invaderRow, middleColumn);
+        setSquidId(squidImg, row, middleColumn);
 
         //Columns to the left of the divider (decreasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let squidImg = getSquidImg();
-          let invaderColumn = middleColumn - (2 * i);
-          setSquidId(squidImg, invaderRow, invaderColumn);
+          let column = middleColumn - (2 * i);
+          setSquidId(squidImg, row, column);
         }
         //Columns to the right of the divider (increasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let squidImg = getSquidImg();
-          let invaderColumn = middleColumn + (2 * i);
-          setSquidId(squidImg, invaderRow, invaderColumn);
+          let column = middleColumn + (2 * i);
+          setSquidId(squidImg, row, column);
         }
       }
       //Crab rows
-      else if (invaderRow <= squidRowSize + crabRowSize) {
+      else if (row <= squidRowSize + crabRowSize) {
         //Divider column (middle column)
         let crabImg = getCrabImg();
-        setCrabId(crabImg, invaderRow, middleColumn);
+        setCrabId(crabImg, row, middleColumn);
 
         //Columns to the left of the divider (decreasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let crabImg = getCrabImg();
-          let invaderColumn = middleColumn - (2 * i);
-          setCrabId(crabImg, invaderRow, invaderColumn);
+          let column = middleColumn - (2 * i);
+          setCrabId(crabImg, row, column);
         }
         //Columns to the right of the divider (increasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let crabImg = getCrabImg();
-          let invaderColumn = middleColumn + (2 * i);
-          setCrabId(crabImg, invaderRow, invaderColumn);
+          let column = middleColumn + (2 * i);
+          setCrabId(crabImg, row, column);
         }
       }
       //Octo rows
       else {
         //Divider column (middle column)
         let octoImg = getOctoImg();
-        setOctoId(octoImg, invaderRow, middleColumn);
+        setOctoId(octoImg, row, middleColumn);
 
         //Columns to the left of the divider (decreasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let octoImg = getOctoImg();
-          let invaderColumn = middleColumn - (2 * i);
-          setOctoId(octoImg, invaderRow, invaderColumn);
+          let column = middleColumn - (2 * i);
+          setOctoId(octoImg, row, column);
         }
         //Columns to the right of the divider (increasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let octoImg = getOctoImg();
-          let invaderColumn = middleColumn + (2 * i);
-          setOctoId(octoImg, invaderRow, invaderColumn);
+          let column = middleColumn + (2 * i);
+          setOctoId(octoImg, row, column);
         }
       }
     }
@@ -309,35 +310,35 @@ function loadInvaders() {
   //If invader column size is even
   else {
     let invadersOnEachSide = invaderColumnSize / 2;
-    for (let invaderRow = 1; invaderRow <= invaderRowSize; invaderRow++) {
+    for (let row = 1; row <= invaderRowSize; row++) {
       //Squid rows
-      if (invaderRow <= squidRowSize) {
+      if (row <= squidRowSize) {
         //Columns to the left of the divider (decreasing index)
         for (let i = 0; i < invadersOnEachSide; i++) {
           let squidImg = getSquidImg();
-          let invaderColumn = middleColumn - 1 - (2 * i);
-          setSquidId(squidImg, invaderRow, invaderColumn);
+          let column = middleColumn - 1 - (2 * i);
+          setSquidId(squidImg, row, column);
         }
         //Columns to the right of the divider (increasing index)
         for (let i = 0; i < invadersOnEachSide; i++) {
           let squidImg = getSquidImg();
-          let invaderColumn = middleColumn + 1 + (2 * i);
-          setSquidId(squidImg, invaderRow, invaderColumn);
+          let column = middleColumn + 1 + (2 * i);
+          setSquidId(squidImg, row, column);
         }
       }
       //Crab rows
-      else if (invaderRow <= squidRowSize + crabRowSize) {
+      else if (row <= squidRowSize + crabRowSize) {
         //Columns to the left of the divider (decreasing index)
         for (let i = 0; i < invadersOnEachSide; i++) {
           let crabImg = getCrabImg();
-          let invaderColumn = middleColumn - 1 - (2 * i);
-          setCrabId(crabImg, invaderRow, invaderColumn);
+          let column = middleColumn - 1 - (2 * i);
+          setCrabId(crabImg, row, column);
         }
         //Columns to the right of the divider (increasing index)
         for (let i = 0; i < invadersOnEachSide; i++) {
           let crabImg = getCrabImg();
-          let invaderColumn = middleColumn + 1 + (2 * i);
-          setCrabId(crabImg, invaderRow, invaderColumn);
+          let column = middleColumn + 1 + (2 * i);
+          setCrabId(crabImg, row, column);
         }
       }
       //Octo rows
@@ -345,14 +346,14 @@ function loadInvaders() {
         //Columns to the left of the divider (decreasing index)
         for (let i = 0; i < invadersOnEachSide; i++) {
           let octoImg = getOctoImg();
-          let invaderColumn = middleColumn - 1 - (2 * i);
-          setOctoId(octoImg, invaderRow, invaderColumn);
+          let column = middleColumn - 1 - (2 * i);
+          setOctoId(octoImg, row, column);
         }
         //Columns to the right of the divider (increasing index)
         for (let i = 0; i < invadersOnEachSide; i++) {
           let octoImg = getOctoImg();
-          let invaderColumn = middleColumn + 1 + (2 * i);
-          setOctoId(octoImg, invaderRow, invaderColumn);
+          let column = middleColumn + 1 + (2 * i);
+          setOctoId(octoImg, row, column);
         }
       }
     }
@@ -383,10 +384,9 @@ function countdown() {
   overlay.style.display = "flex";
 
   let countdownElement = document.getElementById("countdown");
-  countdownElement.textContent = countdownDuration;
+  countdownElement.textContent = "COUNTDOWN";
   let counter = countdownDuration;
   let timer = setInterval(() => {
-    counter--;
     countdownElement.textContent = counter;
     if (counter == 0 ) {
       countdownElement.textContent = "START";
@@ -395,9 +395,20 @@ function countdown() {
       clearInterval(timer);
       overlay.style.display = "none";
     }
+    counter--;
   }, 1000);
 }
 
 function startGame() {
+  moveInvaders();
+}
 
+function moveInvaders() {
+  let leftBoundary = 1;
+  let rightBoundary = columnSize;
+
+  // let timer = setInterval(() => {
+  //   counter--;
+
+  // }, 1000);
 }
