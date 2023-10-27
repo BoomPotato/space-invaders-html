@@ -1,16 +1,26 @@
 "use strict";
 
-function setSquidId(img, row, column) {
-  img.setAttribute("id", `squid-${row}-${column}`);
+function displayImg(img, spriteType, row, column) {
+  img.setAttribute("id", `${spriteType}-${row}-${column}`);
   document.getElementById(`grid-${row}-${column}`).appendChild(img);
 }
 
-function setCrabId(img, row, column) {
-  img.setAttribute("id", `crab-${row}-${column}`);
-  document.getElementById(`grid-${row}-${column}`).appendChild(img);
+function removeImg(row, column) {
+  let gridCell = document.getElementById(`grid-${row}-${column}`);
+  gridCell.removeChild(gridCell.firstChild);
 }
 
-function setOctoId(img, row, column) {
-  img.setAttribute("id", `octo-${row}-${column}`);
-  document.getElementById(`grid-${row}-${column}`).appendChild(img);
+//WIP
+function moveInvadersInOneDirection(interval, idk) {
+}
+
+//WIP
+function destroyInvader(explosionImg, imgCountdownDuration, row, column) {
+  explosionImg.setAttribute("id", `explosion-${row}-${column}`);
+  let gridCell = document.getElementById(`grid-${row}-${column}`);
+  gridCell.appendChild(explosionImg);
+
+  setTimeout(() => {
+    gridCell.removeChild(gridCell.firstChild);
+  }, imgCountdownDuration);
 }
