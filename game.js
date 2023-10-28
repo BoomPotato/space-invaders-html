@@ -584,36 +584,7 @@ function moveInvadersInOneDirection() {
                   let column2 = invaders[rowIndex2][columnIndex2].column;
 
                   let invaderImg2;
-                  if (invaderType2 == "squid1") {
-                    invaders[rowIndex2][columnIndex2].invader = "squid2";
-                    invaderType2 = "squid2";
-                    invaderImg2 = getSquidImg2();
-                  }
-                  else if (invaderType2 == "squid2") {
-                    invaders[rowIndex2][columnIndex2].invader = "squid1";
-                    invaderType2 = "squid1";
-                    invaderImg2 = getSquidImg1();
-                  }
-                  else if (invaderType2 == "crab1") {
-                    invaders[rowIndex2][columnIndex2].invader = "crab2";
-                    invaderType2 = "crab2";
-                    invaderImg2 = getCrabImg2();
-                  }
-                  else if (invaderType2 == "crab2") {
-                    invaders[rowIndex2][columnIndex2].invader = "crab1";
-                    invaderType2 = "crab1";
-                    invaderImg2 = getCrabImg1();
-                  }
-                  else if (invaderType2 == "octo1") {
-                    invaders[rowIndex2][columnIndex2].invader = "octo2";
-                    invaderType2 = "octo2";
-                    invaderImg2 = getOctoImg2();
-                  }
-                  else if (invaderType2 == "octo2") {
-                    invaders[rowIndex2][columnIndex2].invader = "octo1";
-                    invaderType2 = "octo1";
-                    invaderImg2 = getOctoImg1();
-                  }
+                  invaderType2, invaderImg2 = toggleInvaderImg(rowIndex2, columnIndex2, invaderType2);
 
                   let newRow = row2 + 1;
                   invaders[rowIndex2][columnIndex2].row = newRow;
@@ -631,36 +602,7 @@ function moveInvadersInOneDirection() {
           }
 
           let invaderImg;
-          if (invaderType == "squid1") {
-            invaders[rowIndex][columnIndex].invader = "squid2";
-            invaderType = "squid2";
-            invaderImg = getSquidImg2();
-          }
-          else if (invaderType == "squid2") {
-            invaders[rowIndex][columnIndex].invader = "squid1";
-            invaderType = "squid1";
-            invaderImg = getSquidImg1();
-          }
-          else if (invaderType == "crab1") {
-            invaders[rowIndex][columnIndex].invader = "crab2";
-            invaderType = "crab2";
-            invaderImg = getCrabImg2();
-          }
-          else if (invaderType == "crab2") {
-            invaders[rowIndex][columnIndex].invader = "crab1";
-            invaderType = "crab1";
-            invaderImg = getCrabImg1();
-          }
-          else if (invaderType == "octo1") {
-            invaders[rowIndex][columnIndex].invader = "octo2";
-            invaderType = "octo2";
-            invaderImg = getOctoImg2();
-          }
-          else if (invaderType == "octo2") {
-            invaders[rowIndex][columnIndex].invader = "octo1";
-            invaderType = "octo1";
-            invaderImg = getOctoImg1();
-          }
+          invaderType, invaderImg = toggleInvaderImg(rowIndex, columnIndex, invaderType);
 
           //Move all invaders to the right by 1 column
           let newColumn = column + 1;
@@ -690,36 +632,7 @@ function moveInvadersInOneDirection() {
                   let column2 = invaders[rowIndex2][columnIndex2].column;
 
                   let invaderImg2;
-                  if (invaderType2 == "squid1") {
-                    invaders[rowIndex2][columnIndex2].invader = "squid2";
-                    invaderType2 = "squid2";
-                    invaderImg2 = getSquidImg2();
-                  }
-                  else if (invaderType2 == "squid2") {
-                    invaders[rowIndex2][columnIndex2].invader = "squid1";
-                    invaderType2 = "squid1";
-                    invaderImg2 = getSquidImg1();
-                  }
-                  else if (invaderType2 == "crab1") {
-                    invaders[rowIndex2][columnIndex2].invader = "crab2";
-                    invaderType2 = "crab2";
-                    invaderImg2 = getCrabImg2();
-                  }
-                  else if (invaderType2 == "crab2") {
-                    invaders[rowIndex2][columnIndex2].invader = "crab1";
-                    invaderType2 = "crab1";
-                    invaderImg2 = getCrabImg1();
-                  }
-                  else if (invaderType2 == "octo1") {
-                    invaders[rowIndex2][columnIndex2].invader = "octo2";
-                    invaderType2 = "octo2";
-                    invaderImg2 = getOctoImg2();
-                  }
-                  else if (invaderType2 == "octo2") {
-                    invaders[rowIndex2][columnIndex2].invader = "octo1";
-                    invaderType2 = "octo1";
-                    invaderImg2 = getOctoImg1();
-                  }
+                  invaderType2, invaderImg2 = toggleInvaderImg(rowIndex2, columnIndex2, invaderType2);
 
                   let newRow = row2 + 1;
                   invaders[rowIndex2][columnIndex2].row = newRow;
@@ -737,36 +650,7 @@ function moveInvadersInOneDirection() {
           }
 
           let invaderImg;
-          if (invaderType == "squid1") {
-            invaders[rowIndex][columnIndex].invader = "squid2";
-            invaderType = "squid2";
-            invaderImg = getSquidImg2();
-          }
-          else if (invaderType == "squid2") {
-            invaders[rowIndex][columnIndex].invader = "squid1";
-            invaderType = "squid1";
-            invaderImg = getSquidImg1();
-          }
-          else if (invaderType == "crab1") {
-            invaders[rowIndex][columnIndex].invader = "crab2";
-            invaderType = "crab2";
-            invaderImg = getCrabImg2();
-          }
-          else if (invaderType == "crab2") {
-            invaders[rowIndex][columnIndex].invader = "crab1";
-            invaderType = "crab1";
-            invaderImg = getCrabImg1();
-          }
-          else if (invaderType == "octo1") {
-            invaders[rowIndex][columnIndex].invader = "octo2";
-            invaderType = "octo2";
-            invaderImg = getOctoImg2();
-          }
-          else if (invaderType == "octo2") {
-            invaders[rowIndex][columnIndex].invader = "octo1";
-            invaderType = "octo1";
-            invaderImg = getOctoImg1();
-          }
+          invaderType, invaderImg = toggleInvaderImg(rowIndex, columnIndex, invaderType);
 
           //Move all invaders to the left by 1 column
           let newColumn = column - 1;

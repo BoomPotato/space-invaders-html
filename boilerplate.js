@@ -10,9 +10,9 @@ function removeImg(row, column) {
   gridCell.removeChild(gridCell.firstChild);
 }
 
+
 //WIP
-function toggleInvaderImg(rowIndex, columnIndex) {
-  let invaderType;
+function toggleInvaderImg(rowIndex, columnIndex, invaderType) {
   let invaderImg;
 
   if (invaderType == "squid1") {
