@@ -8,4 +8,25 @@ I didn't think it would be complex when I first started, so I didn't create a re
 I tried making the game in Unity a while back but I couldn't figure out how to get the invaders to move downwards whenever they hit a border, and they kept teleporting through the borders cuz I didn't know how to use the movement coordinates thingy (sorry I forgot what it's called). So I gave up :'D
 
 Here's to hoping I can finish this one.
-~and that it doesn't end up in my growing pile of unfinished projects~
+~And that it doesn't end up in my growing pile of unfinished projects~
+
+=============================================================================
+
+## Editable variables in <b>game.js</b>:
+<ul>
+    <li>rowSize</li>
+    <li>columnSize</li>
+    <li>invaderColumnSize</li>
+    <li>squidRowSize</li>
+    <li>crabRowSize</li>
+    <li>octoRowSize</li>
+    <li>bunkerColumnSize</li>
+    <li>countdownDuration</li>
+    <li>intervalDecrementMultiplier</li>
+</ul>
+
+## Editable variables in <b>style.css</b>:
+<ul>
+    <li>grid-template-columns</li>
+    <li>grid-template-rows</li>
+</ul>
