@@ -5,6 +5,7 @@ var rowSize = 13; //Change grid-template-rows in the "style.css" file too!
 var columnSize = 31; //Must be odd number. Change grid-template-columns in the "style.css" file too!
 var middleColumn = Math.ceil(columnSize / 2);
 
+//Invader column size must be < columnSize
 var invaderColumnSize = 11;
 
 //Invader row sizes must add up to >= 5
@@ -22,7 +23,11 @@ var bunkerSegments = [];
 //Seconds to countdown before the game starts
 var countdownDuration = 5;
 
-var finishedLoadingGame = false;
+//TEST: move invaders
+var intervalDecrementMultiplier = 100;
+var rowDescentCounter = 0;
+var interval = 0;
+var moveToRight = true;
 
 function initialiseGame() {
   //Hide welcome buttons
@@ -503,13 +508,15 @@ function countdown() {
 }
 
 function startGame() {
-  moveInvaders();
+  //Move invaders
+  moveInvadersInOneDirection();
 }
 
-function moveInvaders() {
-  let leftBoundary = 1;
-  let rightBoundary = columnSize;
-  let moveToRight = true;
+function moveInvadersInOneDirection() {
+  interval = 1000 - (rowDescentCounter * intervalDecrementMultiplier);
+  console.log("interval", interval);
+  const leftBoundary = 1;
+  const rightBoundary = columnSize;
 
   let timer = setInterval(() => {
     let nearestInvadersToLeft = [];
@@ -520,11 +527,9 @@ function moveInvaders() {
     }
 
     let nearestInvaderToLeft = nearestInvadersToLeft[0];
-    // let nearestInvaderToLeftRowIndex = 0;
     for (let i = 1; i < nearestInvadersToLeft.length; i++) {
       if (nearestInvadersToLeft[i].column <= nearestInvaderToLeft.column) {
         nearestInvaderToLeft = nearestInvadersToLeft[i];
-        // nearestInvaderToLeftRowIndex = i;
       }
     }
 
@@ -562,6 +567,7 @@ function moveInvaders() {
             let nextColumnOfNearestInvaderToRight = invaders[nearestInvaderToRightRowIndex][invaders[nearestInvaderToRightRowIndex].length - 1].column;
             //Move all invaders down by 1 row if the nearest invader to the right is at the right boundary
             if (nextColumnOfNearestInvaderToRight == rightBoundary) {
+              rowDescentCounter++;
               for (let rowIndex2 = 0; rowIndex2 < invaders.length; rowIndex2++) {
                 for (let columnIndex2 = 0; columnIndex2 < invaders[rowIndex2].length; columnIndex2++) {
                   let invaderType2 = invaders[rowIndex2][columnIndex2].invader;
@@ -586,6 +592,10 @@ function moveInvaders() {
                 }
               }
               moveToRight = false;
+              //Stop current timer from executing again
+              clearInterval(timer);
+              //Recursion (function calls itself), create new timer with updated interval
+              moveInvadersInOneDirection();
               break displayInvaderLoop;
             }
           }
@@ -601,6 +611,7 @@ function moveInvaders() {
           if (row == nearestInvaderToLeft.row) {
             //Move all invaders down by 1 row if the first invader in the row (a.k.a. nearest invader to the left) is at the left boundary
             if (column == leftBoundary) {
+              rowDescentCounter++;
               for (let rowIndex2 = 0; rowIndex2 < invaders.length; rowIndex2++) {
                 for (let columnIndex2 = 0; columnIndex2 < invaders[rowIndex2].length; columnIndex2++) {
                   let invaderType2 = invaders[rowIndex2][columnIndex2].invader;
@@ -625,6 +636,10 @@ function moveInvaders() {
                 }
               }
               moveToRight = true;
+              //Stop current timer from executing again
+              clearInterval(timer);
+              //Recursion (function calls itself), create new timer with updated interval
+              moveInvadersInOneDirection();
               break displayInvaderLoop;
             }
           }
@@ -636,9 +651,5 @@ function moveInvaders() {
         }
       }
     }
-    // invaders.shift();
-    if (invaders.length <= 0) {
-      clearInterval(timer);
-    }
-  }, 1000);
+  }, interval);
 }

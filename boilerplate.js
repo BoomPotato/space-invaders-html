@@ -10,9 +10,6 @@ function removeImg(row, column) {
   gridCell.removeChild(gridCell.firstChild);
 }
 
-//WIP
-function moveInvadersInOneDirection(interval, idk) {
-}
 
 //WIP
 function destroyInvader(explosionImg, imgCountdownDuration, row, column) {
