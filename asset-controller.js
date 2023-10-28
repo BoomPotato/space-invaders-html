@@ -1,6 +1,6 @@
 "use strict";
 
-function getSquidImg() {
+function getSquidImg1() {
   let img = document.createElement("img");
   img.setAttribute("src", "./assets/squid-1.png");
   img.setAttribute("height", "25");
@@ -8,7 +8,15 @@ function getSquidImg() {
   return img;
 }
 
-function getCrabImg() {
+function getSquidImg2() {
+  let img = document.createElement("img");
+  img.setAttribute("src", "./assets/squid-2.png");
+  img.setAttribute("height", "25");
+  img.setAttribute("width", "25");
+  return img;
+}
+
+function getCrabImg1() {
   let img = document.createElement("img");
   img.setAttribute("src", "./assets/crab-1.png");
   img.setAttribute("height", "25");
@@ -16,9 +24,25 @@ function getCrabImg() {
   return img;
 }
 
-function getOctoImg() {
+function getCrabImg2() {
+  let img = document.createElement("img");
+  img.setAttribute("src", "./assets/crab-2.png");
+  img.setAttribute("height", "25");
+  img.setAttribute("width", "30");
+  return img;
+}
+
+function getOctoImg1() {
   let img = document.createElement("img");
   img.setAttribute("src", "./assets/octo-1.png");
+  img.setAttribute("height", "25");
+  img.setAttribute("width", "30");
+  return img;
+}
+
+function getOctoImg2() {
+  let img = document.createElement("img");
+  img.setAttribute("src", "./assets/octo-2.png");
   img.setAttribute("height", "25");
   img.setAttribute("width", "30");
   return img;
