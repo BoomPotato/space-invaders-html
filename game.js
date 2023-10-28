@@ -551,16 +551,6 @@ function moveInvadersInOneDirection() {
         let row = invaders[rowIndex][columnIndex].row;
         let column = invaders[rowIndex][columnIndex].column;
 
-
-        //TEST
-        if ((rowIndex == 4 && columnIndex == 0) && invaderType.includes("octo")) {
-          console.log(moveToRight, "octo", invaderType);
-        }
-        if (columnIndex == 0 && invaderType.includes("squid")) {
-          console.log(moveToRight, "squid", invaderType);
-        }
-
-
         //If invaders will move to the right
         if (moveToRight) {
           //Check if row contains the nearest invader to the right boundary
