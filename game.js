@@ -23,7 +23,7 @@ var bunkerSegments = [];
 //Seconds to countdown before the game starts
 var countdownDuration = 5;
 
-//TEST: move invaders
+//Move invaders
 var intervalDecrementMultiplier = 100;
 var rowDescentCounter = 0;
 var interval = 0;
@@ -514,9 +514,11 @@ function startGame() {
 
 function moveInvadersInOneDirection() {
   interval = 1000 - (rowDescentCounter * intervalDecrementMultiplier);
-  console.log("interval", interval);
   const leftBoundary = 1;
   const rightBoundary = columnSize;
+
+  //Log movement interval
+  console.log("interval", interval);
 
   let timer = setInterval(() => {
     let nearestInvadersToLeft = [];
@@ -549,37 +551,15 @@ function moveInvadersInOneDirection() {
         let row = invaders[rowIndex][columnIndex].row;
         let column = invaders[rowIndex][columnIndex].column;
 
-        let invaderImg;
-        if (invaderType == "squid1") {
-          invaders[rowIndex][columnIndex].invader = "squid2";
-          invaderType = "squid2";
-          invaderImg = getSquidImg2();
+
+        //TEST
+        if ((rowIndex == 4 && columnIndex == 0) && invaderType.includes("octo")) {
+          console.log(moveToRight, "octo", invaderType);
         }
-        else if (invaderType == "squid2") {
-          invaders[rowIndex][columnIndex].invader = "squid1";
-          invaderType = "squid1";
-          invaderImg = getSquidImg1();
+        if (columnIndex == 0 && invaderType.includes("squid")) {
+          console.log(moveToRight, "squid", invaderType);
         }
-        else if (invaderType == "crab1") {
-          invaders[rowIndex][columnIndex].invader = "crab2";
-          invaderType = "crab2";
-          invaderImg = getCrabImg2();
-        }
-        else if (invaderType == "crab2") {
-          invaders[rowIndex][columnIndex].invader = "crab1";
-          invaderType = "crab1";
-          invaderImg = getCrabImg1();
-        }
-        else if (invaderType == "octo1") {
-          invaders[rowIndex][columnIndex].invader = "octo2";
-          invaderType = "octo2";
-          invaderImg = getOctoImg2();
-        }
-        else if (invaderType == "octo2") {
-          invaders[rowIndex][columnIndex].invader = "octo1";
-          invaderType = "octo1";
-          invaderImg = getOctoImg1();
-        }
+
 
         //If invaders will move to the right
         if (moveToRight) {
@@ -588,8 +568,16 @@ function moveInvadersInOneDirection() {
             let nextColumnOfNearestInvaderToRight = invaders[nearestInvaderToRightRowIndex][invaders[nearestInvaderToRightRowIndex].length - 1].column;
             //Move all invaders down by 1 row if the nearest invader to the right is at the right boundary
             if (nextColumnOfNearestInvaderToRight == rightBoundary) {
+
+              //If next row of last invader row will be bunker row (second last row), end game
+              if (invaders[invaders.length - 1][0].row + 1 == rowSize - 1) {
+                alert('Game Over'); //TO DO: replace with sth else, show score & return to welcome page
+                clearInterval(timer);
+                return;
+              }
+
               rowDescentCounter++;
-              for (let rowIndex2 = 0; rowIndex2 < invaders.length; rowIndex2++) {
+              for (let rowIndex2 = invaders.length - 1; rowIndex2 >= 0; rowIndex2--) {
                 for (let columnIndex2 = 0; columnIndex2 < invaders[rowIndex2].length; columnIndex2++) {
                   let invaderType2 = invaders[rowIndex2][columnIndex2].invader;
                   let row2 = invaders[rowIndex2][columnIndex2].row;
@@ -641,6 +629,39 @@ function moveInvadersInOneDirection() {
               break displayInvaderLoop;
             }
           }
+
+          let invaderImg;
+          if (invaderType == "squid1") {
+            invaders[rowIndex][columnIndex].invader = "squid2";
+            invaderType = "squid2";
+            invaderImg = getSquidImg2();
+          }
+          else if (invaderType == "squid2") {
+            invaders[rowIndex][columnIndex].invader = "squid1";
+            invaderType = "squid1";
+            invaderImg = getSquidImg1();
+          }
+          else if (invaderType == "crab1") {
+            invaders[rowIndex][columnIndex].invader = "crab2";
+            invaderType = "crab2";
+            invaderImg = getCrabImg2();
+          }
+          else if (invaderType == "crab2") {
+            invaders[rowIndex][columnIndex].invader = "crab1";
+            invaderType = "crab1";
+            invaderImg = getCrabImg1();
+          }
+          else if (invaderType == "octo1") {
+            invaders[rowIndex][columnIndex].invader = "octo2";
+            invaderType = "octo2";
+            invaderImg = getOctoImg2();
+          }
+          else if (invaderType == "octo2") {
+            invaders[rowIndex][columnIndex].invader = "octo1";
+            invaderType = "octo1";
+            invaderImg = getOctoImg1();
+          }
+
           //Move all invaders to the right by 1 column
           let newColumn = column + 1;
           invaders[rowIndex][columnIndex].column = newColumn;
@@ -653,8 +674,16 @@ function moveInvadersInOneDirection() {
           if (row == nearestInvaderToLeft.row) {
             //Move all invaders down by 1 row if the first invader in the row (a.k.a. nearest invader to the left) is at the left boundary
             if (column == leftBoundary) {
+
+              //If next row of last invader row will be bunker row (second last row), end game
+              if (invaders[invaders.length - 1][0].row + 1 == rowSize - 1) {
+                alert('Game Over'); //TO DO: replace with sth else, show score & return to welcome page
+                clearInterval(timer);
+                return;
+              }
+
               rowDescentCounter++;
-              for (let rowIndex2 = 0; rowIndex2 < invaders.length; rowIndex2++) {
+              for (let rowIndex2 = invaders.length - 1; rowIndex2 >= 0; rowIndex2--) {
                 for (let columnIndex2 = 0; columnIndex2 < invaders[rowIndex2].length; columnIndex2++) {
                   let invaderType2 = invaders[rowIndex2][columnIndex2].invader;
                   let row2 = invaders[rowIndex2][columnIndex2].row;
@@ -706,6 +735,39 @@ function moveInvadersInOneDirection() {
               break displayInvaderLoop;
             }
           }
+
+          let invaderImg;
+          if (invaderType == "squid1") {
+            invaders[rowIndex][columnIndex].invader = "squid2";
+            invaderType = "squid2";
+            invaderImg = getSquidImg2();
+          }
+          else if (invaderType == "squid2") {
+            invaders[rowIndex][columnIndex].invader = "squid1";
+            invaderType = "squid1";
+            invaderImg = getSquidImg1();
+          }
+          else if (invaderType == "crab1") {
+            invaders[rowIndex][columnIndex].invader = "crab2";
+            invaderType = "crab2";
+            invaderImg = getCrabImg2();
+          }
+          else if (invaderType == "crab2") {
+            invaders[rowIndex][columnIndex].invader = "crab1";
+            invaderType = "crab1";
+            invaderImg = getCrabImg1();
+          }
+          else if (invaderType == "octo1") {
+            invaders[rowIndex][columnIndex].invader = "octo2";
+            invaderType = "octo2";
+            invaderImg = getOctoImg2();
+          }
+          else if (invaderType == "octo2") {
+            invaders[rowIndex][columnIndex].invader = "octo1";
+            invaderType = "octo1";
+            invaderImg = getOctoImg1();
+          }
+
           //Move all invaders to the left by 1 column
           let newColumn = column - 1;
           invaders[rowIndex][columnIndex].column = newColumn;
