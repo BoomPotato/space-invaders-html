@@ -17,6 +17,7 @@ Here's to hoping I can finish this one.
     <li>rowSize</li>
     <li>columnSize</li>
     <li>invaderColumnSize</li>
+    <li>invaderColumnGaps</li>
     <li>squidRowSize</li>
     <li>crabRowSize</li>
     <li>octoRowSize</li>
