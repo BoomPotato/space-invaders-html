@@ -10,8 +10,11 @@ h1 {
 
 .grid-container {
     display: grid;
+    /* The "grid-template-columns" and "grid-template-rows" are set dynamically in "game.js" */
+    /*
     grid-template-columns: repeat(31, 3vw);
     grid-template-rows: repeat(13, 5.5vh);
+    */
     margin-top: 20px;
     justify-content: center;
 }

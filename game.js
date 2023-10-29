@@ -1,8 +1,8 @@
 "use strict";
 
 //Recommended grid dimensions: 31 columns, 13 rows (5 invaders, 6 gaps, 1 bunker, 1 tank)
-var rowSize = 13; //Change grid-template-rows in the "style.css" file too!
-var columnSize = 31; //Must be odd number. Change grid-template-columns in the "style.css" file too!
+var rowSize = 13;
+var columnSize = 31; //Must be odd number
 var middleColumn = Math.ceil(columnSize / 2);
 
 //Must be < columnSize (code can handle even and odd number of invader columns)
@@ -48,6 +48,8 @@ function initialiseGame() {
  */
 function loadGrid() {
   let grid = document.getElementById("grid");
+  grid.style.setProperty("grid-template-columns", `repeat(${columnSize}, 3vw)`);
+  grid.style.setProperty("grid-template-rows", `repeat(${rowSize}, 5.5vh)`);
 
   //Grid dimensions: 31 across, 13 down (5 invaders, 6 gaps, 1 bunker, 1 tank)
   for (let row = 1; row <= rowSize; row++) {
