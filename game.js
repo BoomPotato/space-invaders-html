@@ -5,8 +5,9 @@ var rowSize = 13; //Change grid-template-rows in the "style.css" file too!
 var columnSize = 31; //Must be odd number. Change grid-template-columns in the "style.css" file too!
 var middleColumn = Math.ceil(columnSize / 2);
 
-//Invader column size must be < columnSize
+//Must be < columnSize (code can handle even and odd number of invader columns)
 var invaderColumnSize = 11;
+var invaderColumnGaps = false;
 
 //Invader row sizes must add up to >= 5
 var squidRowSize = 1;
@@ -271,7 +272,15 @@ function loadInvaders() {
         //Columns to the left of the divider (decreasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let squidImg = getSquidImg1();
-          let column = middleColumn - (2 * i);
+          let column;
+          //If including gap between each invader column
+          if (invaderColumnGaps) {
+            column = middleColumn - (2 * i);
+          }
+          //If not including gap between each invader column
+          else {
+            column = middleColumn - i;
+          }
           displayImg(squidImg, spriteType, row, column);
           invaderRow.unshift({
             'invader': spriteType,
@@ -282,7 +291,15 @@ function loadInvaders() {
         //Columns to the right of the divider (increasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let squidImg = getSquidImg1();
-          let column = middleColumn + (2 * i);
+          let column;
+          //If including gap between each invader column
+          if (invaderColumnGaps) {
+            column = middleColumn + (2 * i);
+          }
+          //If not including gap between each invader column
+          else {
+            column = middleColumn + i;
+          }
           displayImg(squidImg, spriteType, row, column);
           invaderRow.push({
             'invader': spriteType,
@@ -309,7 +326,15 @@ function loadInvaders() {
         //Columns to the left of the divider (decreasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let crabImg = getCrabImg1();
-          let column = middleColumn - (2 * i);
+          let column;
+          //If including gap between each invader column
+          if (invaderColumnGaps) {
+            column = middleColumn - (2 * i);
+          }
+          //If not including gap between each invader column
+          else {
+            column = middleColumn - i;
+          }
           displayImg(crabImg, spriteType, row, column);
           invaderRow.unshift({
             'invader': spriteType,
@@ -320,7 +345,15 @@ function loadInvaders() {
         //Columns to the right of the divider (increasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let crabImg = getCrabImg1();
-          let column = middleColumn + (2 * i);
+          let column;
+          //If including gap between each invader column
+          if (invaderColumnGaps) {
+            column = middleColumn + (2 * i);
+          }
+          //If not including gap between each invader column
+          else {
+            column = middleColumn + i;
+          }
           displayImg(crabImg, spriteType, row, column);
           invaderRow.push({
             'invader': spriteType,
@@ -347,7 +380,15 @@ function loadInvaders() {
         //Columns to the left of the divider (decreasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let octoImg = getOctoImg1();
-          let column = middleColumn - (2 * i);
+          let column;
+          //If including gap between each invader column
+          if (invaderColumnGaps) {
+            column = middleColumn - (2 * i);
+          }
+          //If not including gap between each invader column
+          else {
+            column = middleColumn - i;
+          }
           displayImg(octoImg, spriteType, row, column);
           invaderRow.unshift({
             'invader': spriteType,
@@ -358,7 +399,15 @@ function loadInvaders() {
         //Columns to the right of the divider (increasing index)
         for (let i = 1; i <= invadersOnEachSide; i++) {
           let octoImg = getOctoImg1();
-          let column = middleColumn + (2 * i);
+          let column;
+          //If including gap between each invader column
+          if (invaderColumnGaps) {
+            column = middleColumn + (2 * i);
+          }
+          //If not including gap between each invader column
+          else {
+            column = middleColumn + i;
+          }
           displayImg(octoImg, spriteType, row, column);
           invaderRow.push({
             'invader': spriteType,
@@ -379,27 +428,62 @@ function loadInvaders() {
         let invaderRow = [];
         let spriteType = "squid1";
 
-        //Columns to the left of the divider (decreasing index)
-        for (let i = 0; i < invadersOnEachSide; i++) {
+        //If not including gap between each invader column
+        if (!invaderColumnGaps) {
+          //Divider column (middle column)
           let squidImg = getSquidImg1();
-          let column = middleColumn - 1 - (2 * i);
-          displayImg(squidImg, spriteType, row, column);
-          invaderRow.unshift({
-            'invader': spriteType,
-            'row': row,
-            'column': column
-          });
-        }
-        //Columns to the right of the divider (increasing index)
-        for (let i = 0; i < invadersOnEachSide; i++) {
-          let squidImg = getSquidImg1();
-          let column = middleColumn + 1 + (2 * i);
-          displayImg(squidImg, spriteType, row, column);
+          displayImg(squidImg, spriteType, row, middleColumn);
           invaderRow.push({
             'invader': spriteType,
             'row': row,
-            'column': column
+            'column': middleColumn
           });
+          //Columns to the left of the divider (decreasing index)
+          for (let i = 1; i <= invadersOnEachSide - 1; i++) {
+            let squidImg = getSquidImg1();
+            let column = middleColumn - i;
+            displayImg(squidImg, spriteType, row, column);
+            invaderRow.unshift({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
+          //Columns to the right of the divider (increasing index)
+          for (let i = 1; i <= invadersOnEachSide; i++) {
+            let squidImg = getSquidImg1();
+            let column = middleColumn + i;
+            displayImg(squidImg, spriteType, row, column);
+            invaderRow.push({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
+        }
+        else {
+          //Columns to the left of the divider (decreasing index)
+          for (let i = 0; i < invadersOnEachSide; i++) {
+            let squidImg = getSquidImg1();
+            let column = middleColumn - 1 - (2 * i);
+            displayImg(squidImg, spriteType, row, column);
+            invaderRow.unshift({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
+          //Columns to the right of the divider (increasing index)
+          for (let i = 0; i < invadersOnEachSide; i++) {
+            let squidImg = getSquidImg1();
+            let column = middleColumn + 1 + (2 * i);
+            displayImg(squidImg, spriteType, row, column);
+            invaderRow.push({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
         }
         invaders.push(invaderRow);
       }
@@ -408,27 +492,62 @@ function loadInvaders() {
         let invaderRow = [];
         let spriteType = "crab1";
 
-        //Columns to the left of the divider (decreasing index)
-        for (let i = 0; i < invadersOnEachSide; i++) {
+        //If not including gap between each invader column
+        if (!invaderColumnGaps) {
+          //Divider column (middle column)
           let crabImg = getCrabImg1();
-          let column = middleColumn - 1 - (2 * i);
-          displayImg(crabImg, spriteType, row, column);
-          invaderRow.unshift({
-            'invader': spriteType,
-            'row': row,
-            'column': column
-          });
-        }
-        //Columns to the right of the divider (increasing index)
-        for (let i = 0; i < invadersOnEachSide; i++) {
-          let crabImg = getCrabImg1();
-          let column = middleColumn + 1 + (2 * i);
-          displayImg(crabImg, spriteType, row, column);
+          displayImg(crabImg, spriteType, row, middleColumn);
           invaderRow.push({
             'invader': spriteType,
             'row': row,
-            'column': column
+            'column': middleColumn
           });
+          //Columns to the left of the divider (decreasing index)
+          for (let i = 1; i <= invadersOnEachSide - 1; i++) {
+            let crabImg = getCrabImg1();
+            let column = middleColumn - i;
+            displayImg(crabImg, spriteType, row, column);
+            invaderRow.unshift({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
+          //Columns to the right of the divider (increasing index)
+          for (let i = 1; i <= invadersOnEachSide; i++) {
+            let crabImg = getCrabImg1();
+            let column = middleColumn + i;
+            displayImg(crabImg, spriteType, row, column);
+            invaderRow.push({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
+        }
+        else {
+          //Columns to the left of the divider (decreasing index)
+          for (let i = 0; i < invadersOnEachSide; i++) {
+            let crabImg = getCrabImg1();
+            let column = middleColumn - 1 - (2 * i);
+            displayImg(crabImg, spriteType, row, column);
+            invaderRow.unshift({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
+          //Columns to the right of the divider (increasing index)
+          for (let i = 0; i < invadersOnEachSide; i++) {
+            let crabImg = getCrabImg1();
+            let column = middleColumn + 1 + (2 * i);
+            displayImg(crabImg, spriteType, row, column);
+            invaderRow.push({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
         }
         invaders.push(invaderRow);
       }
@@ -437,27 +556,62 @@ function loadInvaders() {
         let invaderRow = [];
         let spriteType = "octo1";
 
-        //Columns to the left of the divider (decreasing index)
-        for (let i = 0; i < invadersOnEachSide; i++) {
+        //If not including gap between each invader column
+        if (!invaderColumnGaps) {
+          //Divider column (middle column)
           let octoImg = getOctoImg1();
-          let column = middleColumn - 1 - (2 * i);
-          displayImg(octoImg, spriteType, row, column);
-          invaderRow.unshift({
-            'invader': spriteType,
-            'row': row,
-            'column': column
-          });
-        }
-        //Columns to the right of the divider (increasing index)
-        for (let i = 0; i < invadersOnEachSide; i++) {
-          let octoImg = getOctoImg1();
-          let column = middleColumn + 1 + (2 * i);
-          displayImg(octoImg, spriteType, row, column);
+          displayImg(octoImg, spriteType, row, middleColumn);
           invaderRow.push({
             'invader': spriteType,
             'row': row,
-            'column': column
+            'column': middleColumn
           });
+          //Columns to the left of the divider (decreasing index)
+          for (let i = 1; i <= invadersOnEachSide - 1; i++) {
+            let octoImg = getOctoImg1();
+            let column = middleColumn - i;
+            displayImg(octoImg, spriteType, row, column);
+            invaderRow.unshift({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
+          //Columns to the right of the divider (increasing index)
+          for (let i = 1; i <= invadersOnEachSide; i++) {
+            let octoImg = getOctoImg1();
+            let column = middleColumn + i;
+            displayImg(octoImg, spriteType, row, column);
+            invaderRow.push({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
+        }
+        else {
+          //Columns to the left of the divider (decreasing index)
+          for (let i = 0; i < invadersOnEachSide; i++) {
+            let octoImg = getOctoImg1();
+            let column = middleColumn - 1 - (2 * i);
+            displayImg(octoImg, spriteType, row, column);
+            invaderRow.unshift({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
+          //Columns to the right of the divider (increasing index)
+          for (let i = 0; i < invadersOnEachSide; i++) {
+            let octoImg = getOctoImg1();
+            let column = middleColumn + 1 + (2 * i);
+            displayImg(octoImg, spriteType, row, column);
+            invaderRow.push({
+              'invader': spriteType,
+              'row': row,
+              'column': column
+            });
+          }
         }
         invaders.push(invaderRow);
       }
