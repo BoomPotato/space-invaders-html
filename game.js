@@ -664,10 +664,13 @@ function countdown() {
 }
 
 function startGame() {
-  //Move invaders
   moveInvadersInOneDirection();
+  moveTank();
 }
 
+/**
+ * Uses intervals and recursion; will keep calling itself until the game ends
+ */
 function moveInvadersInOneDirection() {
   interval = 1000 - (rowDescentCounter * intervalDecrementMultiplier);
   const leftBoundary = 1;
@@ -808,3 +811,76 @@ function moveInvadersInOneDirection() {
     }
   }, interval);
 }
+
+/**
+ * Modified from StackOverFlow:
+ * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
+ */
+function moveTank() {
+  const action = {
+    moveLeft() {
+      console.log("Move Left");
+    },
+    moveRight() {
+      console.log("Move Right");
+    },
+    stopMoving() {
+      console.log("Stop Moving");
+    },
+    fire() {
+      console.log("Fire");
+    },
+    stopFiring() {
+      console.log("Stop Firing");
+    },
+  };
+
+  const keyAction = {
+    'a':          { keydown: action.moveLeft, keyup: action.stopMoving },
+    'ArrowLeft':  { keydown: action.moveLeft, keyup: action.stopMoving },
+    'd':          { keydown: action.moveRight, keyup: action.stopMoving },
+    'ArrowRight': { keydown: action.moveRight, keyup: action.stopMoving },
+    ' ':          { keydown: action.fire,  keyup: action.stopFiring }
+  };
+
+  const keyHandler = (event) => {
+    if (event.repeat) return; //Key-held, prevent repeated Actions (Does not work in IE11-)
+    if (!(event.key in keyAction) || !(event.type in keyAction[event.key])) return; //No such Action
+    keyAction[event.key][event.type]();  //Trigger an Action
+  };
+  
+  ['keydown', 'keyup'].forEach((eventType) => {
+      document.body.addEventListener(eventType, keyHandler);
+  });
+}
+
+/**
+ * From StackOverFlow:
+ * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
+ */
+// function moveTank2() {
+//   const Action = {
+//     powerOn()  { console.log("Accelerating..."); },
+//     powerOff() { console.log("Decelerating..."); },
+//     brakeOn()  { console.log("Break activated"); },
+//     brakeOff() { console.log("Break released");  },
+//     exit()     { console.log("Nice drive!");     },
+//     // clutch, colors, lights, fire... Add more, go wild!
+//   };
+
+//   const keyAction = {
+//     w:      { keydown: Action.powerOn,  keyup: Action.powerOff },
+//     s:      { keydown: Action.brakeOn,  keyup: Action.brakeOff },
+//     Escape: { keydown: Action.exit }
+//   };
+
+//   const keyHandler = (ev) => {
+//     if (ev.repeat) return; // Key-held, prevent repeated Actions (Does not work in IE11-)
+//     if (!(ev.key in keyAction) || !(ev.type in keyAction[ev.key])) return; // No such Action
+//     keyAction[ev.key][ev.type]();  // Trigger an Action
+//   };
+  
+//   ['keydown', 'keyup'].forEach((evType) => {
+//       document.body.addEventListener(evType, keyHandler);
+//   });
+// }
