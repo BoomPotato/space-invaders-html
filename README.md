@@ -25,9 +25,3 @@ Here's to hoping I can finish this one.
     <li>countdownDuration</li>
     <li>intervalDecrementMultiplier</li>
 </ul>
-
-## Editable variables in <b>style.css</b>:
-<ul>
-    <li>grid-template-columns</li>
-    <li>grid-template-rows</li>
-</ul>

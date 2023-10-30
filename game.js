@@ -2,7 +2,7 @@
 
 //Recommended grid dimensions: 31 columns, 13 rows (5 invaders, 6 gaps, 1 bunker, 1 tank)
 var rowSize = 13;
-var columnSize = 31; //Must be odd number
+var columnSize = 31; //May need to be odd number? I didn't code with the intention of handling even numbers, but my code seems to be able to handle it, probably cuz middleColumn is calculated with Math.ceil()
 var middleColumn = Math.ceil(columnSize / 2);
 
 //Must be < columnSize (code can handle even and odd number of invader columns)
