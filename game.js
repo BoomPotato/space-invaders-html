@@ -30,39 +30,51 @@ var rowDescentCounter = 0;
 var interval = 0;
 var moveToRight = true;
 
+//Tank controls 1
+var tankCoordinates = {};
+
 /**
  * Modified from StackOverFlow:
  * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
  */
-//Tank controls
+//Tank controls 2
 var action = {
   moveLeft() {
-    console.log("Move Left");
-
-
+    //If tank is not at the left boundary
+    if (tankCoordinates.column != 1) {
+      removeImg(rowSize, tankCoordinates.column);
+      tankCoordinates.column--;
+      let tankImg = getTankImg();
+      displayImg(tankImg, "tank", rowSize, tankCoordinates.column);
+    }
   },
   moveRight() {
-    console.log("Move Right");
+    //If tank is not at the right boundary
+    if (tankCoordinates.column != columnSize) {
+      removeImg(rowSize, tankCoordinates.column);
+      tankCoordinates.column++;
+      let tankImg = getTankImg();
+      displayImg(tankImg, "tank", rowSize, tankCoordinates.column);
+    }
   },
   stopMoving() {
-    console.log("Stop Moving");
+    //Do nothing
   },
   fire() {
-    console.log("Fire");
+    
   },
   stopFiring() {
-    console.log("Stop Firing");
+
   },
 };
 var keyAction = {
-  'a':          { keydown: action.moveLeft, keyup: action.stopMoving },
-  'ArrowLeft':  { keydown: action.moveLeft, keyup: action.stopMoving },
-  'd':          { keydown: action.moveRight, keyup: action.stopMoving },
-  'ArrowRight': { keydown: action.moveRight, keyup: action.stopMoving },
-  ' ':          { keydown: action.fire,  keyup: action.stopFiring }
+  'a':          { keydown: action.moveLeft },
+  'ArrowLeft':  { keydown: action.moveLeft },
+  'd':          { keydown: action.moveRight },
+  'ArrowRight': { keydown: action.moveRight },
+  ' ':          { keydown: action.fire }
 };
 var keyHandler = (event) => {
-  if (event.repeat) return; //Key-held, prevent repeated Actions (Does not work in IE11-)
   if (!(event.key in keyAction) || !(event.type in keyAction[event.key])) return; //No such Action
   keyAction[event.key][event.type]();  //Trigger an Action
 };
@@ -674,8 +686,12 @@ function loadBunkers() {
  * Tank id format: tank-{row}-{column}
  */
 function loadTank() {
+  tankCoordinates = {
+    "row": rowSize,
+    "column": middleColumn
+  }
   let tankImg = getTankImg();
-  document.getElementById(`grid-${rowSize}-${middleColumn}`).appendChild(tankImg);
+  displayImg(tankImg, "tank", rowSize, middleColumn);
 }
 
 function countdown() {
@@ -702,7 +718,7 @@ function countdown() {
 
 function startGame() {
   moveInvadersInOneDirection();
-  moveTank();
+  activateTankControls();
 }
 
 /**
@@ -853,16 +869,12 @@ function moveInvadersInOneDirection() {
  * Modified from StackOverFlow:
  * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
  */
-function moveTank() {
-  ['keydown', 'keyup'].forEach((eventType) => {
-    document.body.addEventListener(eventType, keyHandler);
-  });
+function activateTankControls() {
+  document.body.addEventListener("keydown", keyHandler);
 }
 
 function gameOver() {
-  ['keydown', 'keyup'].forEach((eventType) => {
-    document.body.removeEventListener(eventType, keyHandler);
-  });
+  document.body.removeEventListener("keydown", keyHandler);
   // TO DO: show score & return to welcome page
   alert("Game Over");
 }
