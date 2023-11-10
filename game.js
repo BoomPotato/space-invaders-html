@@ -30,6 +30,43 @@ var rowDescentCounter = 0;
 var interval = 0;
 var moveToRight = true;
 
+/**
+ * Modified from StackOverFlow:
+ * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
+ */
+//Tank controls
+var action = {
+  moveLeft() {
+    console.log("Move Left");
+
+
+  },
+  moveRight() {
+    console.log("Move Right");
+  },
+  stopMoving() {
+    console.log("Stop Moving");
+  },
+  fire() {
+    console.log("Fire");
+  },
+  stopFiring() {
+    console.log("Stop Firing");
+  },
+};
+var keyAction = {
+  'a':          { keydown: action.moveLeft, keyup: action.stopMoving },
+  'ArrowLeft':  { keydown: action.moveLeft, keyup: action.stopMoving },
+  'd':          { keydown: action.moveRight, keyup: action.stopMoving },
+  'ArrowRight': { keydown: action.moveRight, keyup: action.stopMoving },
+  ' ':          { keydown: action.fire,  keyup: action.stopFiring }
+};
+var keyHandler = (event) => {
+  if (event.repeat) return; //Key-held, prevent repeated Actions (Does not work in IE11-)
+  if (!(event.key in keyAction) || !(event.type in keyAction[event.key])) return; //No such Action
+  keyAction[event.key][event.type]();  //Trigger an Action
+};
+
 function initialiseGame() {
   //Hide welcome buttons
   document.getElementById("welcomeBtns").style.display = "none";
@@ -720,7 +757,7 @@ function moveInvadersInOneDirection() {
 
               //If next row of last invader row will be bunker row (second last row), end game
               if (invaders[invaders.length - 1][0].row + 1 == rowSize - 1) {
-                alert('Game Over'); //TO DO: replace with sth else, show score & return to welcome page
+                gameOver();
                 clearInterval(timer);
                 return;
               }
@@ -768,7 +805,7 @@ function moveInvadersInOneDirection() {
 
               //If next row of last invader row will be bunker row (second last row), end game
               if (invaders[invaders.length - 1][0].row + 1 == rowSize - 1) {
-                alert('Game Over'); //TO DO: replace with sth else, show score & return to welcome page
+                gameOver();
                 clearInterval(timer);
                 return;
               }
@@ -817,48 +854,24 @@ function moveInvadersInOneDirection() {
  * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
  */
 function moveTank() {
-  const action = {
-    moveLeft() {
-      console.log("Move Left");
-    },
-    moveRight() {
-      console.log("Move Right");
-    },
-    stopMoving() {
-      console.log("Stop Moving");
-    },
-    fire() {
-      console.log("Fire");
-    },
-    stopFiring() {
-      console.log("Stop Firing");
-    },
-  };
-
-  const keyAction = {
-    'a':          { keydown: action.moveLeft, keyup: action.stopMoving },
-    'ArrowLeft':  { keydown: action.moveLeft, keyup: action.stopMoving },
-    'd':          { keydown: action.moveRight, keyup: action.stopMoving },
-    'ArrowRight': { keydown: action.moveRight, keyup: action.stopMoving },
-    ' ':          { keydown: action.fire,  keyup: action.stopFiring }
-  };
-
-  const keyHandler = (event) => {
-    if (event.repeat) return; //Key-held, prevent repeated Actions (Does not work in IE11-)
-    if (!(event.key in keyAction) || !(event.type in keyAction[event.key])) return; //No such Action
-    keyAction[event.key][event.type]();  //Trigger an Action
-  };
-  
   ['keydown', 'keyup'].forEach((eventType) => {
-      document.body.addEventListener(eventType, keyHandler);
+    document.body.addEventListener(eventType, keyHandler);
   });
+}
+
+function gameOver() {
+  ['keydown', 'keyup'].forEach((eventType) => {
+    document.body.removeEventListener(eventType, keyHandler);
+  });
+  // TO DO: show score & return to welcome page
+  alert("Game Over");
 }
 
 /**
  * From StackOverFlow:
  * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
  */
-// function moveTank2() {
+// function moveTankRef() {
 //   const Action = {
 //     powerOn()  { console.log("Accelerating..."); },
 //     powerOff() { console.log("Decelerating..."); },
