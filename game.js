@@ -57,15 +57,9 @@ var action = {
       displayImg(tankImg, "tank", rowSize, tankCoordinates.column);
     }
   },
-  stopMoving() {
-    //Do nothing
-  },
   fire() {
     
-  },
-  stopFiring() {
-
-  },
+  }
 };
 var keyAction = {
   'a':          { keydown: action.moveLeft },
@@ -883,7 +877,7 @@ function gameOver() {
  * From StackOverFlow:
  * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
  */
-// function moveTankRef() {
+// function tankControlsRef() {
 //   const Action = {
 //     powerOn()  { console.log("Accelerating..."); },
 //     powerOff() { console.log("Decelerating..."); },
