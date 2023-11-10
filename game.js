@@ -30,6 +30,49 @@ var rowDescentCounter = 0;
 var interval = 0;
 var moveToRight = true;
 
+//Tank controls 1
+var tankCoordinates = {};
+
+/**
+ * Modified from StackOverFlow:
+ * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
+ */
+//Tank controls 2
+var action = {
+  moveLeft() {
+    //If tank is not at the left boundary
+    if (tankCoordinates.column != 1) {
+      removeImg(rowSize, tankCoordinates.column);
+      tankCoordinates.column--;
+      let tankImg = getTankImg();
+      displayImg(tankImg, "tank", rowSize, tankCoordinates.column);
+    }
+  },
+  moveRight() {
+    //If tank is not at the right boundary
+    if (tankCoordinates.column != columnSize) {
+      removeImg(rowSize, tankCoordinates.column);
+      tankCoordinates.column++;
+      let tankImg = getTankImg();
+      displayImg(tankImg, "tank", rowSize, tankCoordinates.column);
+    }
+  },
+  fire() {
+    
+  }
+};
+var keyAction = {
+  'a':          { keydown: action.moveLeft },
+  'ArrowLeft':  { keydown: action.moveLeft },
+  'd':          { keydown: action.moveRight },
+  'ArrowRight': { keydown: action.moveRight },
+  ' ':          { keydown: action.fire }
+};
+var keyHandler = (event) => {
+  if (!(event.key in keyAction) || !(event.type in keyAction[event.key])) return; //No such Action
+  keyAction[event.key][event.type]();  //Trigger an Action
+};
+
 function initialiseGame() {
   //Hide welcome buttons
   document.getElementById("welcomeBtns").style.display = "none";
@@ -637,8 +680,12 @@ function loadBunkers() {
  * Tank id format: tank-{row}-{column}
  */
 function loadTank() {
+  tankCoordinates = {
+    "row": rowSize,
+    "column": middleColumn
+  }
   let tankImg = getTankImg();
-  document.getElementById(`grid-${rowSize}-${middleColumn}`).appendChild(tankImg);
+  displayImg(tankImg, "tank", rowSize, middleColumn);
 }
 
 function countdown() {
@@ -665,7 +712,7 @@ function countdown() {
 
 function startGame() {
   moveInvadersInOneDirection();
-  moveTank();
+  activateTankControls();
 }
 
 /**
@@ -720,7 +767,7 @@ function moveInvadersInOneDirection() {
 
               //If next row of last invader row will be bunker row (second last row), end game
               if (invaders[invaders.length - 1][0].row + 1 == rowSize - 1) {
-                alert('Game Over'); //TO DO: replace with sth else, show score & return to welcome page
+                gameOver();
                 clearInterval(timer);
                 return;
               }
@@ -768,7 +815,7 @@ function moveInvadersInOneDirection() {
 
               //If next row of last invader row will be bunker row (second last row), end game
               if (invaders[invaders.length - 1][0].row + 1 == rowSize - 1) {
-                alert('Game Over'); //TO DO: replace with sth else, show score & return to welcome page
+                gameOver();
                 clearInterval(timer);
                 return;
               }
@@ -816,49 +863,21 @@ function moveInvadersInOneDirection() {
  * Modified from StackOverFlow:
  * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
  */
-function moveTank() {
-  const action = {
-    moveLeft() {
-      console.log("Move Left");
-    },
-    moveRight() {
-      console.log("Move Right");
-    },
-    stopMoving() {
-      console.log("Stop Moving");
-    },
-    fire() {
-      console.log("Fire");
-    },
-    stopFiring() {
-      console.log("Stop Firing");
-    },
-  };
+function activateTankControls() {
+  document.body.addEventListener("keydown", keyHandler);
+}
 
-  const keyAction = {
-    'a':          { keydown: action.moveLeft, keyup: action.stopMoving },
-    'ArrowLeft':  { keydown: action.moveLeft, keyup: action.stopMoving },
-    'd':          { keydown: action.moveRight, keyup: action.stopMoving },
-    'ArrowRight': { keydown: action.moveRight, keyup: action.stopMoving },
-    ' ':          { keydown: action.fire,  keyup: action.stopFiring }
-  };
-
-  const keyHandler = (event) => {
-    if (event.repeat) return; //Key-held, prevent repeated Actions (Does not work in IE11-)
-    if (!(event.key in keyAction) || !(event.type in keyAction[event.key])) return; //No such Action
-    keyAction[event.key][event.type]();  //Trigger an Action
-  };
-  
-  ['keydown', 'keyup'].forEach((eventType) => {
-      document.body.addEventListener(eventType, keyHandler);
-  });
+function gameOver() {
+  document.body.removeEventListener("keydown", keyHandler);
+  // TO DO: show score & return to welcome page
+  alert("Game Over");
 }
 
 /**
  * From StackOverFlow:
  * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
  */
-// function moveTank2() {
+// function tankControlsRef() {
 //   const Action = {
 //     powerOn()  { console.log("Accelerating..."); },
 //     powerOff() { console.log("Decelerating..."); },

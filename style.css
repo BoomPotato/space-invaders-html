@@ -42,7 +42,10 @@ h1 {
     bottom: 0;
     background-color: rgba(0,0,0,0.7); /* Black background with opacity */
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-    cursor: pointer; /* Add a pointer on hover */
+    /* Add a pointer on hover */
+    /*
+    cursor: pointer;
+    */
 
     /* Centralise countdown text. Only works when display: flex */
     justify-content: center; /* Vertically */
