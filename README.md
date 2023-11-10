@@ -29,7 +29,7 @@ I started this project hoping that I can complete it since I'm more familiar wit
 ## References:
 <ul>
     <li>
-        Move Tank: <br>
+        Tank Controls: <br>
         https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
     </li>
 </ul>
