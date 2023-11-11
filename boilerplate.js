@@ -51,6 +51,24 @@ function toggleInvaderImg(rowIndex, columnIndex, invaderType) {
   return invaderType, invaderImg;
 }
 
+function deductBunkerHealthPoint(index) {
+  bunkerSegments[index].healthpoints--;
+  let bunker = document.getElementById(`grid-${bunkerSegments[index].row}-${bunkerSegments[index].column}`);
+
+  //If healthpoints reaches zero
+  if (bunkerSegments[index].healthpoints == 0) {
+    //Convert bunker to normal grid-item
+    bunkerSegments.splice(index, 1);
+    bunker.innerText = "";
+    bunker.classList.remove("bunker");
+  }
+  //If healthpoints is greater than 0
+  else {
+    //Display updated healthpoints
+    bunker.innerText = bunkerSegments[index].healthpoints;
+  }
+}
+
 
 //WIP
 function destroyInvader(explosionImg, imgCountdownDuration, row, column) {

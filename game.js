@@ -62,13 +62,13 @@ var action = {
     }
   },
   /**
-     * TO DO: fire()
-     * Fire when spacebar is pressed and held down. Might need to use interval 
-     * to prevent bullets from firing too quickly, but I tried using interval for 
-     * keypress events before, and it was very buggy.
-     * 
-     * Try without interval first, like how you handled moveLeft() and moveRight()
-     */
+   * TO DO: fire()
+   * Fire when spacebar is pressed and held down. Might need to use interval 
+   * to prevent bullets from firing too quickly, but I tried using interval for 
+   * keypress events before, and it was very buggy.
+   * 
+   * Try without interval first, like how you handled moveLeft() and moveRight()
+   */
   fire() {
     //If not allowing more than one bullet to be displayed at a time (follow original game)
     if (!multipleBullets) {
@@ -77,28 +77,49 @@ var action = {
           "row": rowSize - 1,
           "column": tankCoordinates.column
         };
-        let bulletStraightImg = getBulletStraightImg();
-        displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
-
-        let timer = setInterval(() => {
-          //TO DO:
-          //If bullet hits invader: score point, remove bullet, and clear interval
-          if (bulletCoordinates.row == 1) {
-            removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
-            bulletCoordinates = {};
-            clearInterval(timer);
-            return;
+        
+        //Check if bullet will hit a bunker
+        let indexOfDamagedBunker = null;
+        for (let index = 0; index < bunkerSegments.length; index++) {
+          if (bulletCoordinates.column == bunkerSegments[index].column) {
+            indexOfDamagedBunker = index;
+            break;
           }
+        }
 
-          removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
-          bulletCoordinates.row--;
+        //If bullet will hit a bunker
+        if (indexOfDamagedBunker != null) {
+          deductBunkerHealthPoint(indexOfDamagedBunker);
+          indexOfDamagedBunker = null;
+          bulletCoordinates = {};
+          return;
+        }
+        //If bullet will not hit a bunker
+        else {
           let bulletStraightImg = getBulletStraightImg();
           displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
-        }, tankBulletInterval);
+
+          let timer = setInterval(() => {
+            //If bullet is at top boundary
+            if (bulletCoordinates.row == 1) {
+              removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+              bulletCoordinates = {};
+              clearInterval(timer);
+              return;
+            }
+            removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+            bulletCoordinates.row--;
+            let bulletStraightImg = getBulletStraightImg();
+            displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+          }, tankBulletInterval);
+        }
       }
     }
     //If allowing more than one bullet to be displayed at a time
     else {
+      /**
+       * This else statement is not complete!!! I'm focusing on the If statement first!!!
+       */
       let bulletCoordinates2 = {
         "row": rowSize - 1,
         "column": tankCoordinates.column
@@ -107,14 +128,11 @@ var action = {
       displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
 
       let timer = setInterval(() => {
-        //TO DO:
-        //If bullet hits invader: score point, remove bullet, and clear interval
         if (bulletCoordinates2.row == 1) {
           removeImgById("bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
           clearInterval(timer);
           return;
         }
-
         removeImgById("bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
         bulletCoordinates2.row--;
         let bulletStraightImg = getBulletStraightImg();
@@ -574,7 +592,7 @@ function loadBunkers() {
       bunkerSegments.push({
         "row": rowSize - 1,
         "column": i,
-        "hp": bunkerHealthPoints
+        "healthpoints": bunkerHealthPoints
       });
     }
   }
@@ -599,7 +617,7 @@ function loadBunkers() {
         bunkerSegments.unshift({
           "row": rowSize - 1,
           "column": i,
-          "hp": bunkerHealthPoints
+          "healthpoints": bunkerHealthPoints
         });
       }
     }
@@ -638,7 +656,7 @@ function loadBunkers() {
         bunkerSegments.push({
           "row": rowSize - 1,
           "column": i,
-          "hp": bunkerHealthPoints
+          "healthpoints": bunkerHealthPoints
         });
       }
     }
@@ -653,10 +671,10 @@ function loadBunkers() {
 
   for (let i = 0; i < bunkerSegments.length; i++) {
     let gridItem = document.getElementById(`grid-${bunkerSegments[i].row}-${bunkerSegments[i].column}`);
-    gridItem.setAttribute("class", "grid-item bunker");
+    gridItem.classList.add("bunker");
 
     //Label the grid cell
-    let label = document.createTextNode(bunkerSegments[i].hp);
+    let label = document.createTextNode(bunkerSegments[i].healthpoints);
     gridItem.appendChild(label);
   } 
 }
