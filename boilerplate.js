@@ -10,6 +10,12 @@ function removeImg(row, column) {
   gridCell.removeChild(gridCell.firstChild);
 }
 
+function removeImgById(spriteType, row, column) {
+  let img = document.getElementById(`${spriteType}-${row}-${column}`);
+  let gridCell = document.getElementById(`grid-${row}-${column}`);
+  gridCell.removeChild(img);
+}
+
 function toggleInvaderImg(rowIndex, columnIndex, invaderType) {
   let invaderImg;
   if (invaderType == "squid1") {

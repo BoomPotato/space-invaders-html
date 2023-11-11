@@ -84,13 +84,13 @@ var action = {
           //TO DO:
           //If bullet hits invader: score point, remove bullet, and clear interval
           if (bulletCoordinates.row == 1) {
-            removeImg(bulletCoordinates.row, bulletCoordinates.column);
+            removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
             bulletCoordinates = {};
             clearInterval(timer);
             return;
           }
 
-          removeImg(bulletCoordinates.row, bulletCoordinates.column);
+          removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
           bulletCoordinates.row--;
           let bulletStraightImg = getBulletStraightImg();
           displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
@@ -110,12 +110,12 @@ var action = {
         //TO DO:
         //If bullet hits invader: score point, remove bullet, and clear interval
         if (bulletCoordinates2.row == 1) {
-          removeImg(bulletCoordinates2.row, bulletCoordinates2.column);
+          removeImgById("bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
           clearInterval(timer);
           return;
         }
 
-        removeImg(bulletCoordinates2.row, bulletCoordinates2.column);
+        removeImgById("bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
         bulletCoordinates2.row--;
         let bulletStraightImg = getBulletStraightImg();
         displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
