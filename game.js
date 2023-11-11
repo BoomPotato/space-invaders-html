@@ -57,8 +57,36 @@ var action = {
       displayImg(tankImg, "tank", rowSize, tankCoordinates.column);
     }
   },
+  /**
+     * TO DO: fire()
+     * Fire when spacebar is pressed and held down. Might need to use interval 
+     * to prevent bullets from firing too quickly, but I tried using interval for 
+     * keypress events before, and it was very buggy.
+     * 
+     * Try without interval first, like how you handled moveLeft() and moveRight()
+     */
   fire() {
-    
+    let bulletCoordinates = {
+      "row": rowSize - 1,
+      "column": tankCoordinates.column
+    };
+    let bulletStraightImg = getBulletStraightImg();
+    displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+
+    let timer = setInterval(() => {
+      //TO DO:
+      //If bullet hits invader: score point, remove bullet, and clear interval
+      if (bulletCoordinates.row == 1) {
+        removeImg(bulletCoordinates.row, bulletCoordinates.column);
+        clearInterval(timer);
+        return;
+      }
+
+      removeImg(bulletCoordinates.row, bulletCoordinates.column);
+      bulletCoordinates.row--;
+      displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+    }, 1000);
+
   }
 };
 var keyAction = {
@@ -683,7 +711,7 @@ function loadTank() {
   tankCoordinates = {
     "row": rowSize,
     "column": middleColumn
-  }
+  };
   let tankImg = getTankImg();
   displayImg(tankImg, "tank", rowSize, middleColumn);
 }

@@ -63,3 +63,11 @@ function getTankImg() {
   img.setAttribute("width", "40");
   return img;
 }
+
+function getBulletStraightImg() {
+  let img = document.createElement("img");
+  img.setAttribute("src", "./assets/bullet-straight.png");
+  img.setAttribute("height", "15");
+  img.setAttribute("width", "10");
+  return img;
+}
