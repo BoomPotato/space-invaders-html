@@ -48,18 +48,27 @@ function getOctoImg2() {
   return img;
 }
 
-function getBunkerImg() {
-  let img = document.createElement("img");
-  img.setAttribute("src", "./assets/bunker.png");
-  img.setAttribute("height", "30");
-  img.setAttribute("width", "120");
-  return img;
-}
-
 function getTankImg() {
   let img = document.createElement("img");
   img.setAttribute("src", "./assets/tank.png");
   img.setAttribute("height", "20");
   img.setAttribute("width", "40");
+  return img;
+}
+
+function getBulletStraightImg() {
+  let img = document.createElement("img");
+  img.setAttribute("src", "./assets/bullet-straight.png");
+  img.setAttribute("height", "15");
+  img.setAttribute("width", "10");
+  return img;
+}
+
+// Not used in new code, but used by old code in "references.js"
+function getBunkerImg() {
+  let img = document.createElement("img");
+  img.setAttribute("src", "./assets/bunker.png");
+  img.setAttribute("height", "30");
+  img.setAttribute("width", "120");
   return img;
 }
