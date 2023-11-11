@@ -27,6 +27,12 @@ h1 {
     justify-content: center;
 }
 
+.bunker {
+    background-color: green;
+    color: white;
+    font-size: large;
+}
+
 #welcomeBtns {
     text-align: center;
 }
