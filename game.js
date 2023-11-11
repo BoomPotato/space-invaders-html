@@ -159,6 +159,11 @@ function loadGrid() {
   //Grid dimensions: 31 across, 13 down (5 invaders, 6 gaps, 1 bunker, 1 tank)
   for (let row = 1; row <= rowSize; row++) {
 
+    /**
+     * Gonna redo the grid cell generation for bunker row and replace bunker imgs with coloured grids, 
+     * to allow bullets to pass through bunker row once a bunker segment is destroyed.
+     */
+
     //Bunkers
     //If row is the second last row (bunker row)
     if (row == rowSize - 1) {
