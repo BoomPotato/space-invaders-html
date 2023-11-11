@@ -21,6 +21,7 @@ I started this project hoping that I can complete it since I'm more familiar wit
     <li>octoRowSize</li>
     <li>bunkerColumnSize</li>
     <li>countdownDuration</li>
+    <li>initialInterval</li>
     <li>intervalDecrementMultiplier</li>
 </ul>
 

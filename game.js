@@ -25,13 +25,16 @@ var bunkerSegments = [];
 var countdownDuration = 5;
 
 //Move invaders
+var initialInterval = 1000;
 var intervalDecrementMultiplier = 100;
 var rowDescentCounter = 0;
-var interval = 0;
 var moveToRight = true;
 
 //Tank controls 1
 var tankCoordinates = {};
+var multipleBullets = false;
+var bulletCoordinates = {};
+var tankBulletInterval = 500;
 
 /**
  * Modified from StackOverFlow:
@@ -66,27 +69,58 @@ var action = {
      * Try without interval first, like how you handled moveLeft() and moveRight()
      */
   fire() {
-    let bulletCoordinates = {
-      "row": rowSize - 1,
-      "column": tankCoordinates.column
-    };
-    let bulletStraightImg = getBulletStraightImg();
-    displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+    //If not allowing more than one bullet to be displayed at a time (follow original game)
+    if (!multipleBullets) {
+      if (Object.keys(bulletCoordinates).length == 0) {
+        bulletCoordinates = {
+          "row": rowSize - 1,
+          "column": tankCoordinates.column
+        };
+        let bulletStraightImg = getBulletStraightImg();
+        displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
 
-    let timer = setInterval(() => {
-      //TO DO:
-      //If bullet hits invader: score point, remove bullet, and clear interval
-      if (bulletCoordinates.row == 1) {
-        removeImg(bulletCoordinates.row, bulletCoordinates.column);
-        clearInterval(timer);
-        return;
+        let timer = setInterval(() => {
+          //TO DO:
+          //If bullet hits invader: score point, remove bullet, and clear interval
+          if (bulletCoordinates.row == 1) {
+            removeImg(bulletCoordinates.row, bulletCoordinates.column);
+            bulletCoordinates = {};
+            clearInterval(timer);
+            return;
+          }
+    
+          removeImg(bulletCoordinates.row, bulletCoordinates.column);
+          bulletCoordinates.row--;
+          let bulletStraightImg = getBulletStraightImg();
+          displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+        }, tankBulletInterval);
       }
-
-      removeImg(bulletCoordinates.row, bulletCoordinates.column);
-      bulletCoordinates.row--;
-      displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
-    }, 1000);
-
+    }
+    //If allowing more than one bullet to be displayed at a time
+    else {
+      let bulletCoordinates2 = {
+        "row": rowSize - 1,
+        "column": tankCoordinates.column
+      };
+      let bulletStraightImg = getBulletStraightImg();
+      displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
+  
+      let timer = setInterval(() => {
+        //TO DO:
+        //If bullet hits invader: score point, remove bullet, and clear interval
+        if (bulletCoordinates2.row == 1) {
+          removeImg(bulletCoordinates2.row, bulletCoordinates2.column);
+          clearInterval(timer);
+          return;
+        }
+  
+        removeImg(bulletCoordinates2.row, bulletCoordinates2.column);
+        bulletCoordinates2.row--;
+        let bulletStraightImg = getBulletStraightImg();
+        displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
+      }, tankBulletInterval);
+    }
+    
   }
 };
 var keyAction = {
@@ -747,12 +781,12 @@ function startGame() {
  * Uses intervals and recursion; will keep calling itself until the game ends
  */
 function moveInvadersInOneDirection() {
-  interval = 1000 - (rowDescentCounter * intervalDecrementMultiplier);
+  let interval = initialInterval - (rowDescentCounter * intervalDecrementMultiplier);
   const leftBoundary = 1;
   const rightBoundary = columnSize;
 
   //Log movement interval
-  console.log("interval", interval);
+  console.log("invaders interval", interval);
 
   let timer = setInterval(() => {
     let nearestInvadersToLeft = [];
