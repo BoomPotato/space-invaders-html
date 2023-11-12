@@ -35,7 +35,7 @@ var moveToRight = true;
 var tankCoordinates = {};
 var multipleBullets = false;
 var bulletCoordinates = {};
-var tankBulletInterval = 250;
+var tankBulletInterval = 100;
 
 /**
  * Modified from StackOverFlow:
