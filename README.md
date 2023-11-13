@@ -10,7 +10,7 @@ I started this project hoping that I can complete it since I'm more familiar wit
 
 ===========================================================================
 
-## Editable variables in <b>game.js</b>:
+## Editable variables in game.js:
 <ul>
   <li>Grid dimensions:
     <ul>
@@ -46,7 +46,7 @@ I started this project hoping that I can complete it since I'm more familiar wit
   </li>
   <li>Tank details:
     <ul>
-      <li>multipleBullets <b>(can currently only be set to false)</b></li>
+      <li>multipleBullets <i><b>(can currently only be set to false)</b></i></li>
       <li>tankBulletInterval</li>
       <li>tankBulletBunkerDamageInterval</li>
     </ul>
