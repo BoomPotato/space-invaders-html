@@ -10,6 +10,12 @@ function removeImg(row, column) {
   gridCell.removeChild(gridCell.firstChild);
 }
 
+function removeImgById(spriteType, row, column) {
+  let img = document.getElementById(`${spriteType}-${row}-${column}`);
+  let gridCell = document.getElementById(`grid-${row}-${column}`);
+  gridCell.removeChild(img);
+}
+
 function toggleInvaderImg(rowIndex, columnIndex, invaderType) {
   let invaderImg;
   if (invaderType == "squid1") {
@@ -45,8 +51,28 @@ function toggleInvaderImg(rowIndex, columnIndex, invaderType) {
   return invaderType, invaderImg;
 }
 
+function deductBunkerHealthPoint(index) {
+  bunkerSegments[index].healthpoints--;
+  let bunker = document.getElementById(`grid-${bunkerSegments[index].row}-${bunkerSegments[index].column}`);
 
-//WIP
+  //If healthpoints reaches zero
+  if (bunkerSegments[index].healthpoints <= 0) {
+    //Convert bunker to normal grid-item
+    bunkerSegments.splice(index, 1);
+    bunker.innerText = "";
+    bunker.classList.remove("bunker");
+  }
+  //If healthpoints is greater than 0
+  else {
+    //Display updated healthpoints
+    bunker.innerText = bunkerSegments[index].healthpoints;
+  }
+}
+
+
+/**
+ * Not complete!!! Not implemented yet!!!
+ */
 function destroyInvader(explosionImg, imgCountdownDuration, row, column) {
   explosionImg.setAttribute("id", `explosion-${row}-${column}`);
   let gridCell = document.getElementById(`grid-${row}-${column}`);
