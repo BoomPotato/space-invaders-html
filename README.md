@@ -12,26 +12,53 @@ I started this project hoping that I can complete it since I'm more familiar wit
 
 ## Editable variables in <b>game.js</b>:
 <ul>
-    <li>rowSize</li>
-    <li>columnSize</li>
-    <li>invaderColumnSize</li>
-    <li>invaderColumnGaps</li>
-    <li>squidRowSize</li>
-    <li>crabRowSize</li>
-    <li>octoRowSize</li>
-    <li>bunkerColumnSize</li>
-    <li>bunkerHealthPoints</li>
-    <li>countdownDuration</li>
-    <li>initialInterval</li>
-    <li>intervalDecrementMultiplier</li>
+  <li>Grid dimensions:
+    <ul>
+      <li>rowSize</li>
+      <li>columnSize</li>
+    </ul>
+  </li>
+  <li>Invader quantity:
+    <ul>
+      <li>invaderColumnSize</li>
+      <li>invaderColumnGaps</li>
+      <li>squidRowSize</li>
+      <li>crabRowSize</li>
+      <li>octoRowSize</li>
+    </ul>
+  </li>
+  <li>Bunker details:
+    <ul>
+      <li>bunkerColumnSize</li>
+      <li>bunkerHealthPoints</li>
+    </ul>
+  </li>
+  <li>Pre-game countdown:
+    <ul>
+      <li>countdownDuration</li>
+    </ul>
+  </li>
+  <li>Interval for moving invaders:
+    <ul>
+      <li>initialInterval</li>
+      <li>intervalDecrementMultiplier</li>
+    </ul>
+  </li>
+  <li>Tank details:
+    <ul>
+      <li>multipleBullets <b>(can currently only be set to false)</b></li>
+      <li>tankBulletInterval</li>
+      <li>tankBulletBunkerDamageInterval</li>
+    </ul>
+  </li>
 </ul>
 
 ===========================================================================
 
 ## References:
 <ul>
-    <li>
-        Tank Controls: <br>
-        https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
-    </li>
+  <li>
+    Tank Controls: <br>
+    https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
+  </li>
 </ul>

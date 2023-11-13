@@ -56,7 +56,7 @@ function deductBunkerHealthPoint(index) {
   let bunker = document.getElementById(`grid-${bunkerSegments[index].row}-${bunkerSegments[index].column}`);
 
   //If healthpoints reaches zero
-  if (bunkerSegments[index].healthpoints == 0) {
+  if (bunkerSegments[index].healthpoints <= 0) {
     //Convert bunker to normal grid-item
     bunkerSegments.splice(index, 1);
     bunker.innerText = "";
@@ -70,7 +70,9 @@ function deductBunkerHealthPoint(index) {
 }
 
 
-//WIP
+/**
+ * Not complete!!! Not implemented yet!!!
+ */
 function destroyInvader(explosionImg, imgCountdownDuration, row, column) {
   explosionImg.setAttribute("id", `explosion-${row}-${column}`);
   let gridCell = document.getElementById(`grid-${row}-${column}`);

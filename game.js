@@ -31,17 +31,19 @@ var intervalDecrementMultiplier = 100;
 var rowDescentCounter = 0;
 var moveToRight = true;
 
-//Tank controls 1
+//Tank details
 var tankCoordinates = {};
 var multipleBullets = false;
 var bulletCoordinates = {};
 var tankBulletInterval = 100;
+var spacebarIsHeldDown = false;
+var tankBulletBunkerDamageInterval = 250;
 
+//Tank controls
 /**
  * Modified from StackOverFlow:
  * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
  */
-//Tank controls 2
 var action = {
   moveLeft() {
     //If tank is not at the left boundary
@@ -61,98 +63,38 @@ var action = {
       displayImg(tankImg, "tank", rowSize, tankCoordinates.column);
     }
   },
-  /**
-   * TO DO: fire()
-   * Fire when spacebar is pressed and held down. Might need to use interval 
-   * to prevent bullets from firing too quickly, but I tried using interval for 
-   * keypress events before, and it was very buggy.
-   * 
-   * Try without interval first, like how you handled moveLeft() and moveRight()
-   */
   fire() {
+    spacebarIsHeldDown = true;
+
     //If not allowing more than one bullet to be displayed at a time (follow original game)
     if (!multipleBullets) {
-      if (Object.keys(bulletCoordinates).length == 0) {
-        bulletCoordinates = {
-          "row": rowSize - 1,
-          "column": tankCoordinates.column
-        };
-        
-        //Check if bullet will hit a bunker
-        let indexOfDamagedBunker = null;
-        for (let index = 0; index < bunkerSegments.length; index++) {
-          if (bulletCoordinates.column == bunkerSegments[index].column) {
-            indexOfDamagedBunker = index;
-            break;
-          }
-        }
-
-        //If bullet will hit a bunker
-        if (indexOfDamagedBunker != null) {
-          deductBunkerHealthPoint(indexOfDamagedBunker);
-          indexOfDamagedBunker = null;
-          bulletCoordinates = {};
-          return;
-        }
-        //If bullet will not hit a bunker
-        else {
-          let bulletStraightImg = getBulletStraightImg();
-          displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
-
-          let timer = setInterval(() => {
-            //If bullet is at top boundary
-            if (bulletCoordinates.row == 1) {
-              removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
-              bulletCoordinates = {};
-              clearInterval(timer);
-              return;
-            }
-            removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
-            bulletCoordinates.row--;
-            let bulletStraightImg = getBulletStraightImg();
-            displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
-          }, tankBulletInterval);
-        }
-      }
+      fireSingleBullets();
     }
     //If allowing more than one bullet to be displayed at a time
     else {
-      /**
-       * This else statement is not complete!!! I'm focusing on the If statement first!!!
-       */
-      let bulletCoordinates2 = {
-        "row": rowSize - 1,
-        "column": tankCoordinates.column
-      };
-      let bulletStraightImg = getBulletStraightImg();
-      displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
-
-      let timer = setInterval(() => {
-        if (bulletCoordinates2.row == 1) {
-          removeImgById("bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
-          clearInterval(timer);
-          return;
-        }
-        removeImgById("bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
-        bulletCoordinates2.row--;
-        let bulletStraightImg = getBulletStraightImg();
-        displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
-      }, tankBulletInterval);
+      fireMultipleBullets();
     }
-
+  },
+  stopFiring() {
+    spacebarIsHeldDown = false;
   }
 };
 var keyAction = {
-  'a':          { keydown: action.moveLeft },
-  'ArrowLeft':  { keydown: action.moveLeft },
-  'd':          { keydown: action.moveRight },
+  'a': { keydown: action.moveLeft },
+  'ArrowLeft': { keydown: action.moveLeft },
+  'd': { keydown: action.moveRight },
   'ArrowRight': { keydown: action.moveRight },
-  ' ':          { keydown: action.fire }
+  ' ': { keydown: action.fire, keyup: action.stopFiring }
 };
 var keyHandler = (event) => {
   if (!(event.key in keyAction) || !(event.type in keyAction[event.key])) return; //No such Action
+  if (event.repeat && event.key == " ") {
+    return; // Key-held, prevent repeated Actions (Does not work in IE11-)
+  }
   keyAction[event.key][event.type]();  //Trigger an Action
 };
+
+
 
 function initialiseGame() {
   //Hide welcome buttons
@@ -676,7 +618,7 @@ function loadBunkers() {
     //Label the grid cell
     let label = document.createTextNode(bunkerSegments[i].healthpoints);
     gridItem.appendChild(label);
-  } 
+  }
 }
 
 /**
@@ -867,7 +809,106 @@ function moveInvadersInOneDirection() {
  * https://stackoverflow.com/questions/16345870/keydown-keyup-events-for-specific-keys
  */
 function activateTankControls() {
-  document.body.addEventListener("keydown", keyHandler);
+  ['keydown', 'keyup'].forEach((evType) => {
+    document.body.addEventListener(evType, keyHandler);
+  });
+}
+
+function fireSingleBullets() {
+  //If there is no bullet being displayed
+  if (Object.keys(bulletCoordinates).length == 0) {
+    bulletCoordinates = {
+      "row": rowSize - 1,
+      "column": tankCoordinates.column
+    };
+
+    //Check if bullet will hit a bunker
+    let indexOfDamagedBunker = null;
+    for (let index = 0; index < bunkerSegments.length; index++) {
+      if (bulletCoordinates.column == bunkerSegments[index].column) {
+        indexOfDamagedBunker = index;
+        break;
+      }
+    }
+
+    //If bullet will hit a bunker
+    if (indexOfDamagedBunker != null) {
+      deductBunkerHealthPoint(indexOfDamagedBunker);
+      indexOfDamagedBunker = null;
+      bulletCoordinates = {};
+
+      /**
+       * BUG: Double-tap bug
+       * There's a bug in this recursion block that causes bunker hp to be deducted super quickly, about twice as quickly 
+       * when spacebar is pressed once or twice and immediately held compared to when spacebar is just held. 
+       * My guess is that there are 2 fireSingleBullets() functions running at the same time when the player double-tap holds,
+       * and the functions take turns to deduct the bunker's hp in rapid succession. 
+       * 
+       * Eg: tankBulletBunkerDamageInterval is set to 250ms. Function A deducts bunker hp. 125ms later, function B deducts bunker hp. 
+       * 125ms later, function A deducts bunker hp again (having waited 250ms since it first ran). 125ms later, function B deducts 
+       * bunker hp again (having waited 250ms since it first ran). To the player, it appears as if the recursion cycle has sped up, 
+       * when that's not the case, and it's actually caused by 2 functions taking turns to execute.
+       * 
+       * I'm not going to fix this bug cuz I don't know how to. And I think it's pretty neat :)
+       * Players can use it to quickly clear bunkers that are in the way.
+       */
+      if (spacebarIsHeldDown) {
+        setTimeout(() => {
+          fireSingleBullets();
+          return;
+        }, tankBulletBunkerDamageInterval);
+      }
+      return;
+
+    }
+    //If bullet will not hit a bunker
+    else {
+      let bulletStraightImg = getBulletStraightImg();
+      displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+
+      let timer = setInterval(() => {
+        //If bullet is at top boundary
+        if (bulletCoordinates.row == 1) {
+          removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+          bulletCoordinates = {};
+          clearInterval(timer);
+
+          if (spacebarIsHeldDown) {
+            fireSingleBullets();
+          }
+          return;
+        }
+        removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+        bulletCoordinates.row--;
+        let bulletStraightImg = getBulletStraightImg();
+        displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+      }, tankBulletInterval);
+    }
+  }
+}
+
+/**
+ * Not complete!!! I'm focusing on fireSingleBullets() first!!!
+ */
+function fireMultipleBullets() {
+  let bulletCoordinates2 = {
+    "row": rowSize - 1,
+    "column": tankCoordinates.column
+  };
+  let bulletStraightImg = getBulletStraightImg();
+  displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
+
+  let timer = setInterval(() => {
+    if (bulletCoordinates2.row == 1) {
+      removeImgById("bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
+      clearInterval(timer);
+      return;
+    }
+    removeImgById("bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
+    bulletCoordinates2.row--;
+    let bulletStraightImg = getBulletStraightImg();
+    displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates2.row, bulletCoordinates2.column);
+  }, tankBulletInterval);
 }
 
 function gameOver() {
