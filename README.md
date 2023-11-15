@@ -21,7 +21,7 @@ I started this project hoping that I can complete it since I'm more familiar wit
   <li>Invader quantity:
     <ul>
       <li>invaderColumnSize</li>
-      <li>invaderColumnGaps</li>
+      <li>invaderColumnGaps <i><b>(can currently only be set to false)</b></i></li>
       <li>squidRowSize</li>
       <li>crabRowSize</li>
       <li>octoRowSize</li>

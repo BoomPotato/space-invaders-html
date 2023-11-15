@@ -7,13 +7,18 @@ var middleColumn = Math.ceil(columnSize / 2);
 
 //Must be < columnSize (code can handle even and odd number of invader columns)
 var invaderColumnSize = 11;
-var invaderColumnGaps = false;
+var invaderColumnGaps = false; //Include an empty column between each column of invaders. Haven't handled scenario where bullet travels through empty column and an invader overlaps it in the next interval
 
 //Invader row sizes must add up to >= 5
 var squidRowSize = 1;
 var crabRowSize = 2;
 var octoRowSize = 2;
 var invaders = [];
+
+//Invader details
+var squidPoints = 40;
+var crabPoints = 20;
+var octoPoints = 10;
 
 //Each bunker takes up 3 columns
 //Recommended size: 4 or 5 (code can handle even and odd number of bunkers)
@@ -655,12 +660,12 @@ function countdown() {
   overlay.style.display = "flex";
 
   let countdownElement = document.getElementById("countdown");
-  countdownElement.textContent = "COUNTDOWN";
+  countdownElement.innerText = "COUNTDOWN";
   let counter = countdownDuration;
   let timer = setInterval(() => {
-    countdownElement.textContent = counter;
+    countdownElement.innerText = counter;
     if (counter == 0) {
-      countdownElement.textContent = "START";
+      countdownElement.innerText = "START";
     }
     if (counter <= -1) {
       clearInterval(timer);
@@ -882,6 +887,9 @@ function fireSingleBullets() {
       let bulletStraightImg = getBulletStraightImg();
       displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
 
+      //TEST
+      checkIfBulletHitsInvader();
+
       let timer = setInterval(() => {
         //If bullet is at top boundary
         if (bulletCoordinates.row == 1) {
@@ -898,6 +906,10 @@ function fireSingleBullets() {
         bulletCoordinates.row--;
         let bulletStraightImg = getBulletStraightImg();
         displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+
+        //TEST
+        checkIfBulletHitsInvader();
+
       }, tankBulletInterval);
     }
   }
@@ -928,12 +940,83 @@ function fireMultipleBullets() {
 }
 
 /**
+ * EXTREMELY BUGGY!!! Currently working on this
+ */
+function checkIfBulletHitsInvader() {
+  console.log("hi")
+  for (let rowIndex = 0; rowIndex < invaders.length; rowIndex++) {
+    for (let columnIndex = 0; columnIndex < invaders[rowIndex].length; columnIndex++) {
+      let invaderType = invaders[rowIndex][columnIndex].invader;
+      let row = invaders[rowIndex][columnIndex].row;
+      let column = invaders[rowIndex][columnIndex].column;
+
+      //If bullet hits invader (same column, one row below invader)
+      if (bulletCoordinates.column == column && bulletCoordinates.row == row + 1) {
+        //If invader is squid
+        if (invaderType.indexOf("squid") != -1) {
+          score += squidPoints;
+          document.getElementById("score").innerText = score;
+        }
+        //If invader is crab
+        else if (invaderType.indexOf("crab") != -1) {
+          score += crabPoints;
+          document.getElementById("score").innerText = score;
+        }
+        //If invader is octo
+        else if (invaderType.indexOf("octo") != -1) {
+          score += octoPoints;
+          document.getElementById("score").innerText = score;
+        }
+
+        //Remove invader
+        invaders[rowIndex].splice(columnIndex, 1);
+        removeImgById(invaderType, row, column);
+
+        //Remove bullet
+        removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+        bulletCoordinates = {};
+      }
+    }
+  }
+}
+
+// function checkIfBulletHitsInvaderOld(invader, row, column, rowIndex, columnIndex) {
+//   //If bullet hits invader
+//   if (bulletCoordinates.row == row + 1 && bulletCoordinates.column == column) {
+//     //If invader is squid
+//     if (invader.indexOf("squid") != -1) {
+//       score += squidPoints;
+//       document.getElementById("score").innerText = score;
+//     }
+//     //If invader is crab
+//     else if (invader.indexOf("crab") != -1) {
+//       score += crabPoints;
+//       document.getElementById("score").innerText = score;
+//     }
+//     //If invader is octo
+//     else if (invader.indexOf("octo") != -1) {
+//       score += octoPoints;
+//       document.getElementById("score").innerText = score;
+//     }
+
+//     //Remove invader
+//     invaders[rowIndex].splice(columnIndex, 1);
+//     removeImgById(invader, row, column);
+
+//     //Remove bullet
+//     bulletCoordinates = {};
+//     removeImgById("bulletstraight", row, column);
+//   }
+// }
+
+
+/**
  * Not complete!!!
  */
 function gameOver() {
   //Deactivate tank controls
   document.body.removeEventListener("keydown", keyHandler);
-  
+
   // TO DO: show score & return to welcome page
   alert("Game Over");
 }
