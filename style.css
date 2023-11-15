@@ -15,7 +15,7 @@ h1 {
     grid-template-columns: repeat(31, 3vw);
     grid-template-rows: repeat(13, 5.5vh);
     */
-    margin-top: 20px;
+    margin-top: 1em;
     justify-content: center;
 }
   
@@ -61,4 +61,26 @@ h1 {
 #countdown {
     color: yellow;
     font-size: 7em;
+}
+
+
+#scoreAndLives {
+    display: none; /* Hidden by default */
+    margin-top: 1em;
+}
+
+table, th, td {
+    color: white;
+    font-size: 1.2em;
+    border: 1px solid darkgoldenrod;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td {
+    padding: 0.15em;
+}
+
+.lifeImg {
+    margin: 0.1em;
 }

@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <h1>Space Invaders</h1>
+  <h1 id="gameTitle">Space Invaders</h1>
   <div id="welcomeBtns">
     <!--put image of game characters here-->
     <button onclick="initialiseGame()">Start</button>
@@ -19,6 +19,22 @@
     <button>Scores</button>
     <br><br>
     <button>Instructions</button>
+  </div>
+  <div id="scoreAndLives">
+    <table>
+    <thead>
+      <tr>
+        <td>Score</td>
+        <td>Lives</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="score">0</td>
+        <td id="lives"></td>
+      </tr>
+    </tbody>
+  </table>
   </div>
   <div id="grid" class="grid-container"></div>
   <div id="overlay">

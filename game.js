@@ -39,6 +39,11 @@ var tankBulletInterval = 100;
 var spacebarIsHeldDown = false;
 var tankBulletBunkerDamageInterval = 250;
 
+//Player details
+var score = 0;
+var initialLives = 3;
+var livesLeft = 3;
+
 //Tank controls
 /**
  * Modified from StackOverFlow:
@@ -97,13 +102,16 @@ var keyHandler = (event) => {
 
 
 function initialiseGame() {
-  //Hide welcome buttons
+  //Hide game title and welcome buttons, and display score and lives
+  document.getElementById("gameTitle").style.display = "none";
   document.getElementById("welcomeBtns").style.display = "none";
+  document.getElementById("scoreAndLives").style.display = "block";
 
   loadGrid();
   loadInvaders();
   loadBunkers();
   loadTank();
+  loadScoreAndLives();
 
   countdown();
 }
@@ -120,7 +128,7 @@ function loadGrid() {
   for (let row = 1; row <= rowSize; row++) {
     for (let column = 1; column <= columnSize; column++) {
       let gridItem = document.createElement("div");
-      gridItem.setAttribute("class", "grid-item");
+      gridItem.classList.add("grid-item");
       gridItem.setAttribute("id", `grid-${row}-${column}`);
 
       //Label the grid cell
@@ -633,6 +641,14 @@ function loadTank() {
   displayImg(tankImg, "tank", rowSize, middleColumn);
 }
 
+function loadScoreAndLives() {
+  for (let i = 0; i < initialLives; i++) {
+    let img = getTankImg();
+    img.classList.add("lifeImg");
+    document.getElementById("lives").appendChild(img);
+  }
+}
+
 function countdown() {
   //Unhide overlay
   let overlay = document.getElementById("overlay");
@@ -911,8 +927,13 @@ function fireMultipleBullets() {
   }, tankBulletInterval);
 }
 
+/**
+ * Not complete!!!
+ */
 function gameOver() {
+  //Deactivate tank controls
   document.body.removeEventListener("keydown", keyHandler);
+  
   // TO DO: show score & return to welcome page
   alert("Game Over");
 }

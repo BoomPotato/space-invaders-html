@@ -51,6 +51,11 @@ I started this project hoping that I can complete it since I'm more familiar wit
       <li>tankBulletBunkerDamageInterval</li>
     </ul>
   </li>
+  <li>Player details:
+    <ul>
+      <li>initialLives</li>
+    </ul>
+  </li>
 </ul>
 
 ===========================================================================
