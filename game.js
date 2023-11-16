@@ -42,7 +42,7 @@ var multipleBullets = false;
 var bulletCoordinates = {};
 var tankBulletInterval = 100;
 var spacebarIsHeldDown = false;
-var tankBulletBunkerDamageInterval = 250;
+var tankBulletBunkerDamageInterval = 150;
 
 //Player details
 var score = 0;
@@ -873,14 +873,12 @@ function fireSingleBullets() {
        * I'm not going to fix this bug cuz I don't know how to. And I think it's pretty neat :)
        * Players can use it to quickly clear bunkers that are in the way.
        */
-      if (spacebarIsHeldDown) {
-        setTimeout(() => {
+      setTimeout(() => {
+        if (spacebarIsHeldDown) {
           fireSingleBullets();
-          return;
-        }, tankBulletBunkerDamageInterval);
-      }
+        }
+      }, tankBulletBunkerDamageInterval);
       return;
-
     }
     //If bullet will not hit a bunker
     else {
@@ -888,7 +886,7 @@ function fireSingleBullets() {
       displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
 
       //TEST
-      checkIfBulletHitsInvader();
+      // checkIfBulletHitsInvader();
 
       let timer = setInterval(() => {
         //If bullet is at top boundary
@@ -908,7 +906,7 @@ function fireSingleBullets() {
         displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
 
         //TEST
-        checkIfBulletHitsInvader();
+        // checkIfBulletHitsInvader();
 
       }, tankBulletInterval);
     }
@@ -943,7 +941,7 @@ function fireMultipleBullets() {
  * EXTREMELY BUGGY!!! Currently working on this
  */
 function checkIfBulletHitsInvader() {
-  console.log("hi")
+  console.log("hi");
   for (let rowIndex = 0; rowIndex < invaders.length; rowIndex++) {
     for (let columnIndex = 0; columnIndex < invaders[rowIndex].length; columnIndex++) {
       let invaderType = invaders[rowIndex][columnIndex].invader;
