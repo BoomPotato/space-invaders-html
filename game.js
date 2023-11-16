@@ -886,7 +886,7 @@ function fireSingleBullets() {
       displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
 
       //TEST
-      // checkIfBulletHitsInvader();
+      checkIfBulletHitsInvader();
 
       let timer = setInterval(() => {
         //If bullet is at top boundary
@@ -906,7 +906,7 @@ function fireSingleBullets() {
         displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
 
         //TEST
-        // checkIfBulletHitsInvader();
+        checkIfBulletHitsInvader();
 
       }, tankBulletInterval);
     }
@@ -941,7 +941,7 @@ function fireMultipleBullets() {
  * EXTREMELY BUGGY!!! Currently working on this
  */
 function checkIfBulletHitsInvader() {
-  console.log("hi");
+  console.log("checkIfBulletHitsInvader");
   for (let rowIndex = 0; rowIndex < invaders.length; rowIndex++) {
     for (let columnIndex = 0; columnIndex < invaders[rowIndex].length; columnIndex++) {
       let invaderType = invaders[rowIndex][columnIndex].invader;
