@@ -12,6 +12,10 @@ function removeImg(row, column) {
 
 function removeImgById(spriteType, row, column) {
   let img = document.getElementById(`${spriteType}-${row}-${column}`);
+
+  //TEST
+  console.log(img);
+
   let gridCell = document.getElementById(`grid-${row}-${column}`);
   gridCell.removeChild(img);
 }

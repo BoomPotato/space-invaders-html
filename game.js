@@ -31,8 +31,8 @@ var bunkerHealthPoints = 10;
 var countdownDuration = 5;
 
 //Move invaders
-var initialInterval = 1000;
-var intervalDecrementMultiplier = 100;
+var initialInvaderInterval = 1100;
+var invaderIntervalDecrementMultiplier = 100;
 var rowDescentCounter = 0;
 var moveToRight = true;
 
@@ -43,6 +43,10 @@ var bulletCoordinates = {};
 var tankBulletInterval = 100;
 var spacebarIsHeldDown = false;
 var tankBulletBunkerDamageInterval = 150;
+
+//Collision checker details
+var collisionCheckerInterval = 50;
+var gameOver = false;
 
 //Player details
 var score = 0;
@@ -679,13 +683,16 @@ function countdown() {
 function startGame() {
   moveInvadersInOneDirection();
   activateTankControls();
+
+  //TEST
+  // activateCollisionChecker();
 }
 
 /**
  * Uses intervals and recursion; will keep calling itself until the game ends
  */
 function moveInvadersInOneDirection() {
-  let interval = initialInterval - (rowDescentCounter * intervalDecrementMultiplier);
+  let interval = initialInvaderInterval - (rowDescentCounter * invaderIntervalDecrementMultiplier);
   const leftBoundary = 1;
   const rightBoundary = columnSize;
 
@@ -699,6 +706,10 @@ function moveInvadersInOneDirection() {
       nearestInvadersToLeft.push(invaders[rowIndex][0]);
       nearestInvadersToRight.push(invaders[rowIndex][invaders[rowIndex].length - 1]);
     }
+
+    //TEST
+    console.log("nearestInvadersToLeft", nearestInvadersToLeft);
+    console.log("nearestInvadersToRight", nearestInvadersToRight);
 
     let nearestInvaderToLeft = nearestInvadersToLeft[0];
     for (let i = 1; i < nearestInvadersToLeft.length; i++) {
@@ -733,7 +744,7 @@ function moveInvadersInOneDirection() {
 
               //If next row of last invader row will be bunker row (second last row), end game
               if (invaders[invaders.length - 1][0].row + 1 == rowSize - 1) {
-                gameOver();
+                loadGameOver();
                 clearInterval(timer);
                 return;
               }
@@ -781,7 +792,7 @@ function moveInvadersInOneDirection() {
 
               //If next row of last invader row will be bunker row (second last row), end game
               if (invaders[invaders.length - 1][0].row + 1 == rowSize - 1) {
-                gameOver();
+                loadGameOver();
                 clearInterval(timer);
                 return;
               }
@@ -900,18 +911,152 @@ function fireSingleBullets() {
           }
           return;
         }
+
+        //TEST
+        //If bullet had hit an invader in the previous interval
+        if (Object.keys(bulletCoordinates).length == 0) {
+          clearInterval(timer);
+
+          if (spacebarIsHeldDown) {
+            fireSingleBullets();
+          }
+          return;
+        }
+
         removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
         bulletCoordinates.row--;
         let bulletStraightImg = getBulletStraightImg();
         displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
 
-        //TEST
-        checkIfBulletHitsInvader();
+        if (bulletCoordinates.row > 1) {
+
+          //TEST
+          checkIfBulletHitsInvader();
+        }
 
       }, tankBulletInterval);
     }
   }
 }
+
+/**
+ * EXTREMELY BUGGY!!! Currently working on this
+ * 
+ * Does not check for tankbullet-bunker collisions; that is done in fireSingleBullets()
+ * 
+ * Method for checking for collisions (only for tankbullet hitting invader):
+ * Run this checker every time the tankbullet moves. But this is risky (and buggy, apparently) cuz the tankbullet interval is 
+ * only 100ms, but the invader interval can go lower than that, so this checker may not be able to keep up with invader movements
+ * 
+ * Might replace this with activateCollisionChecker() if I can't get this to work
+ */
+function checkIfBulletHitsInvader() {
+  //Check if the grid cell above the bullet is empty
+  //https://stackoverflow.com/questions/47447796/javascript-how-to-know-if-an-element-is-empty
+  let gridItemAboveBullet = document.getElementById(`grid-${bulletCoordinates.row - 1}-${bulletCoordinates.column}`);
+  let childrenOfGridItem = gridItemAboveBullet.childNodes;
+
+  if (childrenOfGridItem.length != 0) {
+    let invaderIdParts = childrenOfGridItem[0].id.split('-');
+    let invaderType = invaderIdParts[0];
+    let row = invaderIdParts[1];
+    let column = invaderIdParts[2];
+
+    //Remove bullet
+    removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+    bulletCoordinates = {};
+
+    //Remove invader
+    removeImgById(invaderType, row, column);
+    for (let rowIndex = invaders.length - 1; rowIndex >= 0; rowIndex--) {
+
+      //TEST
+      console.log("invaders[rowIndex]", invaders[rowIndex])
+      console.log("invaders[rowIndex][0]", invaders[rowIndex][0]);
+
+      if (invaders[rowIndex][0].row == row) {
+        for (let columnIndex = 0; columnIndex < invaders[rowIndex].length; columnIndex++) {
+          if (invaders[rowIndex][columnIndex].column == column) {
+            invaders[rowIndex].splice(columnIndex, 1);
+          }
+        }
+      }
+    }
+
+    //If invader is squid
+    if (invaderType.indexOf("squid") != -1) {
+      score += squidPoints;
+      document.getElementById("score").innerText = score;
+    }
+    //If invader is crab
+    else if (invaderType.indexOf("crab") != -1) {
+      score += crabPoints;
+      document.getElementById("score").innerText = score;
+    }
+    //If invader is octo
+    else if (invaderType.indexOf("octo") != -1) {
+      score += octoPoints;
+      document.getElementById("score").innerText = score;
+    }
+  }
+
+}
+
+/**
+ * Does not check for tankbullet-bunker collisions; that is done in fireSingleBullets()
+ * 
+ * Another method of checking for collisions (only for tankbullet hitting invader):
+ * Run this checker every 50ms, which is faster than lowest possible invader interval and the tankbullet interval. But this 
+ * may overwork the machine
+ * 
+ * Might replace checkIfBulletHitsInvader() with this if I can't get checkIfBulletHitsInvader() to work
+ */
+function activateCollisionChecker() {
+  let timer = setInterval(() => {
+    invaderLoop:
+    for (let rowIndex = invaders.length - 1; rowIndex >= 0; rowIndex--) {
+      for (let columnIndex = 0; columnIndex < invaders[rowIndex].length; columnIndex--) {
+        console.log(invaders[rowIndex][columnIndex]);
+        let invaderType = invaders[rowIndex][columnIndex].invader;
+        let row = invaders[rowIndex][columnIndex].row;
+        let column = invaders[rowIndex][columnIndex].column;
+
+        if (bulletCoordinates.row + 1 == row && bulletCoordinates.column == column) {
+          //If invader is squid
+          if (invaderType.indexOf("squid") != -1) {
+            score += squidPoints;
+            document.getElementById("score").innerText = score;
+          }
+          //If invader is crab
+          else if (invaderType.indexOf("crab") != -1) {
+            score += crabPoints;
+            document.getElementById("score").innerText = score;
+          }
+          //If invader is octo
+          else if (invaderType.indexOf("octo") != -1) {
+            score += octoPoints;
+            document.getElementById("score").innerText = score;
+          }
+
+          //Remove invader
+          removeImgById(invaderType, row, column);
+          invaders[rowIndex].splice(columnIndex, 1);
+
+          //Remove bullet
+          removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
+          bulletCoordinates = {};
+
+          break invaderLoop;
+        }
+      }
+    }
+    if (gameOver) {
+      clearInterval(timer);
+    }
+  }, collisionCheckerInterval);
+}
+
+
 
 /**
  * Not complete!!! I'm focusing on fireSingleBullets() first!!!
@@ -938,80 +1083,9 @@ function fireMultipleBullets() {
 }
 
 /**
- * EXTREMELY BUGGY!!! Currently working on this
- */
-function checkIfBulletHitsInvader() {
-  console.log("checkIfBulletHitsInvader");
-  for (let rowIndex = 0; rowIndex < invaders.length; rowIndex++) {
-    for (let columnIndex = 0; columnIndex < invaders[rowIndex].length; columnIndex++) {
-      let invaderType = invaders[rowIndex][columnIndex].invader;
-      let row = invaders[rowIndex][columnIndex].row;
-      let column = invaders[rowIndex][columnIndex].column;
-
-      //If bullet hits invader (same column, one row below invader)
-      if (bulletCoordinates.column == column && bulletCoordinates.row == row + 1) {
-        //If invader is squid
-        if (invaderType.indexOf("squid") != -1) {
-          score += squidPoints;
-          document.getElementById("score").innerText = score;
-        }
-        //If invader is crab
-        else if (invaderType.indexOf("crab") != -1) {
-          score += crabPoints;
-          document.getElementById("score").innerText = score;
-        }
-        //If invader is octo
-        else if (invaderType.indexOf("octo") != -1) {
-          score += octoPoints;
-          document.getElementById("score").innerText = score;
-        }
-
-        //Remove invader
-        invaders[rowIndex].splice(columnIndex, 1);
-        removeImgById(invaderType, row, column);
-
-        //Remove bullet
-        removeImgById("bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
-        bulletCoordinates = {};
-      }
-    }
-  }
-}
-
-// function checkIfBulletHitsInvaderOld(invader, row, column, rowIndex, columnIndex) {
-//   //If bullet hits invader
-//   if (bulletCoordinates.row == row + 1 && bulletCoordinates.column == column) {
-//     //If invader is squid
-//     if (invader.indexOf("squid") != -1) {
-//       score += squidPoints;
-//       document.getElementById("score").innerText = score;
-//     }
-//     //If invader is crab
-//     else if (invader.indexOf("crab") != -1) {
-//       score += crabPoints;
-//       document.getElementById("score").innerText = score;
-//     }
-//     //If invader is octo
-//     else if (invader.indexOf("octo") != -1) {
-//       score += octoPoints;
-//       document.getElementById("score").innerText = score;
-//     }
-
-//     //Remove invader
-//     invaders[rowIndex].splice(columnIndex, 1);
-//     removeImgById(invader, row, column);
-
-//     //Remove bullet
-//     bulletCoordinates = {};
-//     removeImgById("bulletstraight", row, column);
-//   }
-// }
-
-
-/**
  * Not complete!!!
  */
-function gameOver() {
+function loadGameOver() {
   //Deactivate tank controls
   document.body.removeEventListener("keydown", keyHandler);
 
