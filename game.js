@@ -891,6 +891,11 @@ function fireSingleBullets() {
        * 
        * I'm not going to fix this bug cuz I don't know how to. And I think it's pretty neat :)
        * Players can use it to quickly clear bunkers that are in the way.
+       * 
+       * EDIT (5 Dec 2023):
+       * MAJOR PROBLEM!!! This bug is also present when firing at invaders. This lets players destroy a lot of invaders in a super 
+       * short amount of time. Not good for implementing a leaderboard system if some players exploit this cheat and others don't; 
+       * it wouldn't be fair! This bug NEEDS to be fixed!
        */
       setTimeout(() => {
         if (spacebarIsHeldDown) {
@@ -936,6 +941,7 @@ function fireSingleBullets() {
         let bulletStraightImg = getBulletStraightImg();
         displayImg(bulletStraightImg, "bulletstraight", bulletCoordinates.row, bulletCoordinates.column);
 
+        //If bullet is not at the top row (row 1)
         if (bulletCoordinates.row > 1) {
 
           //TEST
@@ -957,6 +963,22 @@ function fireSingleBullets() {
  * only 100ms, but the invader interval can go lower than that, so this checker may not be able to keep up with invader movements
  * 
  * Might replace this with activateCollisionChecker() if I can't get this to work
+ * 
+ * EDIT 1 (5 Dec 2023):
+ * Fixed bug that causes invaders to halt movement when all invaders in the last row are destroyed (caused by for-loop trying to 
+ * read properties of empty row array). Fixed by checking if each row is empty before pushing invader coordinates to 
+ * nearestInvadersToLeft and nearestInvadersToRight. If row is empty (all invaders in it have been destroyed), remove the empty 
+ * row array from the invaders array with the splice() method.
+ * 
+ * EDIT 2 (5 Dec 2023):
+ * Discovered new bug:
+ * Sometimes, bullets fired from the tank will enter a squid's grid cell (bullet is displayed next to the squid in the same cell) 
+ * instead of destroying the squid. This MOSTLY happens (this can still happen in very long intervals; like when the invader 
+ * interval has only been decreased once) when the invader movement interval is very short (invader movement is very fast). My guess 
+ * is that later into the game when the invader interval speeds up, it becomes too quick for the code to destroy the invader. An 
+ * important thing to note is that the bullet continues its trajectory (all the way to the top of the grid; row 1) after being 
+ * displayed next to the squid, and the same goes for the invaders. But maybe the interval being too fast isn't the problem, since 
+ * the bug can also occur during long intervals. I really don't know what's causing the problem :(
  */
 function checkIfBulletHitsInvader() {
   //Check if the grid cell above the bullet is empty
