@@ -703,8 +703,16 @@ function moveInvadersInOneDirection() {
     let nearestInvadersToLeft = [];
     let nearestInvadersToRight = [];
     for (let rowIndex = 0; rowIndex < invaders.length; rowIndex++) {
-      nearestInvadersToLeft.push(invaders[rowIndex][0]);
-      nearestInvadersToRight.push(invaders[rowIndex][invaders[rowIndex].length - 1]);
+      //If row is not empty (there are invaders in the row)
+      if (invaders[rowIndex].length != 0) {
+        nearestInvadersToLeft.push(invaders[rowIndex][0]);
+        nearestInvadersToRight.push(invaders[rowIndex][invaders[rowIndex].length - 1]);
+      }
+      //If row is empty (there are no invaders in the row, all invaders in the row have been destroyed)
+      else {
+        //Remove empty row array from invaders array
+        invaders.splice(rowIndex, 1);
+      }
     }
 
     //TEST
