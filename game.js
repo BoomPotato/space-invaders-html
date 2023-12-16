@@ -977,8 +977,8 @@ function fireSingleBullets() {
  * interval has only been decreased once) when the invader movement interval is very short (invader movement is very fast). My guess 
  * is that later into the game when the invader interval speeds up, it becomes too quick for the code to destroy the invader. An 
  * important thing to note is that the bullet continues its trajectory (all the way to the top of the grid; row 1) after being 
- * displayed next to the squid, and the same goes for the invaders. But maybe the interval being too fast isn't the problem, since 
- * the bug can also occur during long intervals. I really don't know what's causing the problem :(
+ * displayed next to the squid, and the invaders continue their movement too. But maybe the interval being too fast isn't the 
+ * problem, since the bug can also occur during long intervals. I really don't know what's causing the problem :(
  */
 function checkIfBulletHitsInvader() {
   //Check if the grid cell above the bullet is empty
@@ -1001,15 +1001,24 @@ function checkIfBulletHitsInvader() {
     for (let rowIndex = invaders.length - 1; rowIndex >= 0; rowIndex--) {
 
       //TEST
-      console.log("invaders[rowIndex]", invaders[rowIndex])
+      console.log("invaders[rowIndex]", invaders[rowIndex]);
+      console.log("invaders[rowIndex].length", invaders[rowIndex].length);
       console.log("invaders[rowIndex][0]", invaders[rowIndex][0]);
 
-      if (invaders[rowIndex][0].row == row) {
-        for (let columnIndex = 0; columnIndex < invaders[rowIndex].length; columnIndex++) {
-          if (invaders[rowIndex][columnIndex].column == column) {
-            invaders[rowIndex].splice(columnIndex, 1);
+      //If row is not empty (there are invaders in the row)
+      if (invaders[rowIndex].length != 0) {
+        if (invaders[rowIndex][0].row == row) {
+          for (let columnIndex = 0; columnIndex < invaders[rowIndex].length; columnIndex++) {
+            if (invaders[rowIndex][columnIndex].column == column) {
+              invaders[rowIndex].splice(columnIndex, 1);
+            }
           }
         }
+      }
+      //If row is empty (there are no invaders in the row, all invaders in the row have been destroyed)
+      else {
+        //Remove empty row array from invaders array
+        invaders.splice(rowIndex, 1);
       }
     }
 
