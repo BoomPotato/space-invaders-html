@@ -746,9 +746,9 @@ function moveInvadersInOneDirection() {
         if (moveToRight) {
           //Check if row contains the nearest invader to the right boundary
           if (row == nearestInvaderToRight.row) {
-            let nextColumnOfNearestInvaderToRight = invaders[nearestInvaderToRightRowIndex][invaders[nearestInvaderToRightRowIndex].length - 1].column;
+            let columnOfNearestInvaderToRight = invaders[nearestInvaderToRightRowIndex][invaders[nearestInvaderToRightRowIndex].length - 1].column;
             //Move all invaders down by 1 row if the nearest invader to the right is at the right boundary
-            if (nextColumnOfNearestInvaderToRight == rightBoundary) {
+            if (columnOfNearestInvaderToRight == rightBoundary) {
 
               //If next row of last invader row will be bunker row (second last row), end game
               if (invaders[invaders.length - 1][0].row + 1 == rowSize - 1) {
